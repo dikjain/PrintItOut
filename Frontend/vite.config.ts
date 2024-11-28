@@ -15,7 +15,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://printitout.onrender.com',
+        target: 'https://printitout.onrender.com/',
         changeOrigin: true,
       },
     },

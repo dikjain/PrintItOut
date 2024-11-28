@@ -1,7 +1,6 @@
 import Assignments from "../Models/assignment.model.js";
 import Users from "../Models/user.model.js";
 
-// Add a new assignment
 const addAssignment = async (req, res) => {
     const { title, userId, isAdmin, pages , upiId} = req.body;
 
@@ -24,7 +23,6 @@ const addAssignment = async (req, res) => {
     }
 };
 
-// Change assignment status (admin only)
 const changeAssignmentStatus = async (req, res) => {
     const { assignmentId, status } = req.body;
 
@@ -44,7 +42,6 @@ const changeAssignmentStatus = async (req, res) => {
     res.status(200).json(assignment);
 };
 
-// Show assignment status (user & admin)
 const showAssignmentStatus = async (req, res) => {
     const { assignmentId } = req.params;
 
@@ -66,7 +63,6 @@ const getPendingAssignments = async (req, res) => {
     res.status(200).json(assignments);
 };
 
-// Delete assignment (admin only)
 const deleteAssignment = async (req, res) => {
     const { assignmentId } = req.params;
 
@@ -112,4 +108,3 @@ const addQuestion = async (req, res) => {
 };
 
 export { addAssignment, changeAssignmentStatus, showAssignmentStatus, getAllAssignments, getPendingAssignments, deleteAssignment, getAdminAssignments, getUserAssignments, addQuestion };
-

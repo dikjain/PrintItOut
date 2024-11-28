@@ -42,8 +42,8 @@ export function StudentDashboard() {
   const [showQueryModal, setShowQueryModal] = useState(false);
   const [selectedQuery, setSelectedQuery] = useState<string | null>(null);
 
-  const upiId = "aryan.chauhan@superyes"; // Replace with your UPI ID
-  const userName = "AryanChauhan"; // Replace with your name
+  const upiId = "aryan.chauhan@superyes";
+  const userName = "AryanChauhan";
 
   const generateQRCode = async (pages: number) => {
     const amount = pages * 3;
@@ -310,7 +310,6 @@ export function StudentDashboard() {
           </div>
         </div>
 
-        {/* Stats */}
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <div className={cn("bg-white overflow-hidden shadow rounded-lg", darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900")}>
             <div className="p-5">
@@ -345,7 +344,6 @@ export function StudentDashboard() {
           </div>
         </div>
 
-        {/* Admin Assignments */}
         <div className={cn("bg-white shadow rounded-lg", darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900")}>
           <div className="px-4 py-5 sm:px-6">
             <h2 className="text-lg font-medium">Admin Assignments</h2>
