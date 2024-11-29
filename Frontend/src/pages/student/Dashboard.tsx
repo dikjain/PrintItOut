@@ -35,6 +35,7 @@ export function StudentDashboard() {
   const [isProcessing, setIsProcessing] = useState<string | null>(null);
   const [showQR, setShowQR] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState("");
+  const [upiUrl, setUpiUrl] = useState("");
   const [selectedAssignment, setSelectedAssignment] = useState<{id: string, title: string, pages: number} | null>(null);
   const [paymentAgreement, setPaymentAgreement] = useState(false);
   const [userUpiId, setUserUpiId] = useState("");
@@ -48,6 +49,7 @@ export function StudentDashboard() {
   const generateQRCode = async (pages: number) => {
     const amount = pages * 3;
     const upiUrl = `upi://pay?pa=${upiId}&pn=${userName}&am=${amount}&cu=INR`;
+    setUpiUrl(upiUrl);
 
     try {
       const qrCode = await QRCode.toDataURL(upiUrl);
@@ -199,7 +201,12 @@ export function StudentDashboard() {
           <p className="mb-4">Amount to pay: ₹{selectedAssignment ? selectedAssignment.pages * 3 : 0}</p>
           {qrCodeUrl && (
             <div className="flex flex-col items-center">
-              <img src={qrCodeUrl} alt="UPI QR Code" className="mb-4" />
+              <div className="flex items-center mb-2">
+                <img src={qrCodeUrl} alt="UPI QR Code" className="mr-2" />
+                <span className="mr-4">or</span>
+                <a href={upiUrl} target="_blank" rel="noopener noreferrer" className="bg-blue-500 text-white ml-2 px-4 py-2 rounded-md">Pay</a>
+              </div>
+              <p className="mb-6 text-black/60 text-[10px]">Use the QR code above or the pay button to complete your payment</p>
               <div className="flex flex-col space-y-4 w-full">
                 <label className="flex items-center space-x-2">
                   <input
@@ -266,7 +273,7 @@ export function StudentDashboard() {
               <div className="px-4 py-5 sm:p-6">
                 <div className="space-y-4">
                   {historyPrints.length === 0 ? (
-                    <p className="text-sm text-center">No prints at this moment</p>
+                    <p className="text-sm text-center">Your Print History is empty</p>
                   ) : (
                     historyPrints.map((historyPrint, index) => (
                       <React.Fragment key={historyPrint._id}>
@@ -371,12 +378,12 @@ export function StudentDashboard() {
                             <FileText className="h-5 w-5" />
                           </div>
                           <div className="ml-4">
-                            <p className="text-sm font-medium">{assignment.title}</p>
+                            <p className="text-sm font-medium truncate sm:bold sm:whitespace-normal">{assignment.title}</p>
                             <p className="text-sm">{assignment.pages} pages</p>
                           </div>
                         </div>
                         <div className="flex items-center space-x-4">
-                          <div className="text-sm">{new Date(assignment.createdAt).toLocaleString()}</div>
+                          <div className="text-sm underline">{window.innerWidth < 460  ? new Date(assignment.createdAt).toLocaleString().split(',')[0] : new Date(assignment.createdAt).toLocaleString()}</div>
                           <button
                             onClick={() => handlePrintAssignment(assignment._id, assignment.title, assignment.pages)}
                             disabled={isProcessing !== null}
@@ -385,7 +392,7 @@ export function StudentDashboard() {
                             Print
                           </button>
                           <button
-                            onClick={() => handleShowQuery(assignment.query || "No query available")}
+                            onClick={() => handleShowQuery(assignment.query || "Questions are not available yet !!!")}
                             className="bg-yellow-500 text-white px-2 py-1 rounded-md flex items-center"
                           >
                             <MessageCircleQuestion className="h-5 w-5" />
