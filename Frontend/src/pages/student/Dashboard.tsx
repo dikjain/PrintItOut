@@ -111,8 +111,17 @@ export function StudentDashboard() {
       alert("Please agree to the payment terms and provide the UPI ID before proceeding");
       return;
     }
-    
     setIsProcessing(selectedAssignment.id);
+
+    if(prints.some(print => print._id === selectedAssignment.id)) {
+      setIsProcessing(null);
+      setShowQR(false);
+      setSelectedAssignment(null);
+      setPaymentAgreement(false);
+      setUserUpiId("");
+      alert("Assignment already printed");
+      return;
+    }
     
     try {
       const response = await axios.post('/api/assignments/add', { 
@@ -226,8 +235,8 @@ export function StudentDashboard() {
                   </button>
                   <button
                     onClick={handlePaymentComplete}
-                    disabled={!paymentAgreement || !userUpiId}
-                    className={`${!paymentAgreement || !userUpiId ? 'bg-gray-400' : 'bg-green-500'} text-white px-4 py-2 rounded-md`}
+                    disabled={!paymentAgreement || !userUpiId || isProcessing !== null}
+                    className={`${!paymentAgreement || !userUpiId || isProcessing !== null ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-500'} text-white px-4 py-2 rounded-md`}
                   >
                     Payment Done
                   </button>
