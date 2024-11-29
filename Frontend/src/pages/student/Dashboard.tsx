@@ -197,14 +197,14 @@ export function StudentDashboard() {
       >
         <div className={cn("bg-white p-8 rounded-lg shadow-lg w-96", darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900")}>
           <h2 className="text-xl font-semibold mb-4">Payment Required</h2>
-          <p className="text-red-500 mb-4">Note: if you don't pay the amount, we won't print your assignment ( every payment is checked )</p>
+          <p className="text-red-500 mb-2 text-[12px]">Note: if you don't pay the amount, we won't print your assignment ( every payment is checked )</p>
           <p className="mb-4">Amount to pay: ₹{selectedAssignment ? selectedAssignment.pages * 3 : 0}</p>
           {qrCodeUrl && (
             <div className="flex flex-col items-center">
-              <div className="flex items-center mb-2">
-                <img src={qrCodeUrl} alt="UPI QR Code" className="mr-2" />
-                <span className="mr-4">or</span>
-                <a href={upiUrl} target="_blank" rel="noopener noreferrer" className="bg-blue-500 text-white ml-2 px-4 py-2 rounded-md">Pay</a>
+              <div className="flex items-center gap-4 mb-2">
+                <img src={qrCodeUrl} alt="UPI QR Code" className="" />
+                <span className="-ml-1 mr-2">or</span>
+                <a href={upiUrl} target="_blank" rel="noopener noreferrer" className="bg-blue-500 text-white px-4 py-2 rounded-md">Pay</a>
               </div>
               <p className="mb-6 text-black/60 text-[10px]">Use the QR code above or the pay button to complete your payment</p>
               <div className="flex flex-col space-y-4 w-full">
