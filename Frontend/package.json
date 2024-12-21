@@ -11,10 +11,6 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
-    "@nivo/bar": "^0.88.0",
-    "@nivo/pie": "^0.88.0",
-    "@nivo/radar": "^0.88.0",
-    "@nivo/scatterplot": "^0.88.0",
     "axios": "^1.7.8",
     "chart.js": "^4.4.7",
     "clsx": "^2.1.0",
