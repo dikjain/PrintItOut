@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthLayout } from '@/layouts/AuthLayout';
 import { DashboardLayout } from './layouts/DashboardLayout';
 import { LoginPage } from '@/pages/auth/LoginPage';
-import { SignupPage } from '@/pages/auth/SignupPage';
+import { SignupPage } from './pages/auth/SignupPage';
 import { StudentDashboard } from '@/pages/student/Dashboard';
 import { AdminDashboard } from '@/pages/admin/Dashboard';
 import { AnimatePresence } from 'framer-motion';

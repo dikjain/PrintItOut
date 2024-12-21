@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 const signupSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
-  rollnumber: z.number().min(11, 'Roll number is required'),
+  rollnumber: z.string().min(10, 'Roll number is required'),
   phone: z.string().min(10, 'Phone number must be at least 10 digits'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
   confirmPassword: z.string(),
@@ -28,6 +28,7 @@ export function SignupForm() {
   const { setUser, user } = useAuth();
   const [otpSent, setOtpSent] = useState(false);
   const [serverOtp, setServerOtp] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const {
     register,
     handleSubmit,
@@ -57,12 +58,14 @@ export function SignupForm() {
       console.log('OTP sent successfully:', response.data.otp);
     } catch (error) {
       console.error('Error sending OTP:', error);
+      setErrorMessage('Failed to send OTP. Please try again.');
     }
   };
 
   const onSubmit = async (data: SignupFormData) => {
     if (data.otp !== serverOtp) {
       console.error('Invalid OTP');
+      setErrorMessage('Invalid OTP. Please check and try again.');
       return;
     }
     try {
@@ -81,11 +84,13 @@ export function SignupForm() {
       navigate('/dashboard');
     } catch (error) {
       console.error('Error registering user:', error);
+      setErrorMessage('Registration failed. Please try again.');
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
+      {errorMessage && <p className="text-red-500">{errorMessage}</p>}
       <div>
         <Input
           placeholder="Full Name"

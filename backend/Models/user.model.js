@@ -20,6 +20,8 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required: true,
         unique: true,
+        min: 1000000000, 
+        max: 99999999999, 
     },
     assignments:[{
         type: mongoose.Schema.Types.ObjectId,
