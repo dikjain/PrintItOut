@@ -284,7 +284,7 @@ export function UserDashboard() {
 
                 <div className="space-y-6 sm:space-y-10 relative z-50">
                   <div>
-                    <h3 className={`text-xl sm:text-3xl font-bold mb-4 sm:mb-8 text-transparent bg-clip-text bg-gradient-to-r ${darkMode ? "text-white" : "text-black"} underline`} style={{ textDecorationColor: darkMode ? "green" : "blue" }}>Semester-wise Subjects</h3>
+                    <h3 className={`text-xl sm:text-3xl font-bold mb-4 sm:mb-8 bg-clip-text ${darkMode ? "text-white" : "bg-gradient-to-r from-blue-500 to-purple-500 text-transparent"} underline`} style={{ textDecorationColor: darkMode ? "green" : "blue" }}>Semester-wise Subjects</h3>
                     <div className="flex justify-center mb-4">
                       <button 
                         className={`px-4 py-2 rounded-l-full  ${selectedSemester === '1' ? darkMode ? "bg-gradient-to-b from-transparent via-transparent to-green-500/40" : "bg-green-500" : currentTheme.cardBg} ${selectedSemester === '1' ? 'text-white' : currentTheme.text}`}
@@ -341,7 +341,7 @@ export function UserDashboard() {
                   </div>
 
                   <div>
-                    <h3 className={`text-xl sm:text-3xl font-bold mb-4 sm:mb-8 text-transparent bg-clip-text bg-gradient-to-r ${darkMode ? "text-white" : "text-black"} underline`} style={{ textDecorationColor: darkMode ? "green" : "blue" }}>Semester 1 Subjects</h3>
+                    <h3 className={`text-xl sm:text-3xl font-bold mb-4 sm:mb-8 bg-clip-text ${darkMode ? "text-white" : "bg-gradient-to-r from-blue-500 to-purple-500 text-transparent"} underline`} style={{ textDecorationColor: darkMode ? "green" : "blue" }}>Semester 1 Subjects</h3>
                     <div className="flex overflow-x-auto space-x-4 sm:space-x-6 pb-4 h-fit relative auto-scroll scrollbar-hide">
                       {results.filter(result => result[7] === '1').map((result, index) => (
                         <div
@@ -377,7 +377,7 @@ export function UserDashboard() {
                   </div>
 
                   <div>
-                    <h3 className={`text-xl sm:text-3xl font-bold mb-4 sm:mb-8 text-transparent bg-clip-text bg-gradient-to-r ${darkMode ? "text-white" : "text-black"} underline`} style={{ textDecorationColor: darkMode ? "green" : "blue" }}>Semester 2 Subjects</h3>
+                    <h3 className={`text-xl sm:text-3xl font-bold mb-4 sm:mb-8 bg-clip-text ${darkMode ? "text-white" : "bg-gradient-to-r from-blue-500 to-purple-500 text-transparent"} underline`} style={{ textDecorationColor: darkMode ? "green" : "blue" }}>Semester 2 Subjects</h3>
                     <div className="flex overflow-x-auto space-x-4 sm:space-x-6 pb-4 auto-scroll scrollbar-hide">
                       {results.filter(result => result[7] === '2').map((result, index) => (
                         <div
