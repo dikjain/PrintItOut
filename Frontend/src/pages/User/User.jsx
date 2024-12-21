@@ -3,7 +3,7 @@ import { useAuth } from '@/context';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { PageTransition } from '@/components/animations/PageTransition';
 import Papa from 'papaparse';
-import { FiSearch, FiUser, FiBook, FiAward, FiBarChart2, FiSliders } from 'react-icons/fi';
+import { FiUser, FiBook, FiAward, FiBarChart2 } from 'react-icons/fi';
 
 export function UserDashboard() {
   const { user } = useAuth();
@@ -50,7 +50,7 @@ export function UserDashboard() {
 
     setLoading(true);
     try {
-      const resultsResponse = await fetch('/Public/Assets/results.csv');
+      const resultsResponse = await fetch('/assets/results.csv');
       if (!resultsResponse.ok) {
         throw new Error(`Failed to fetch results.csv: ${resultsResponse.statusText}`);
       }
@@ -58,7 +58,7 @@ export function UserDashboard() {
       const parsedResultsData = Papa.parse(resultsCsvText, { header: false });
       const filteredResults = parsedResultsData.data.filter((row) => row.includes(enrolNo));
 
-      const subjectsResponse = await fetch('/Public/Assets/subjects.csv');
+      const subjectsResponse = await fetch('/assets/subjects.csv');
       if (!subjectsResponse.ok) {
         throw new Error(`Failed to fetch subjects.csv: ${subjectsResponse.statusText}`);
       }
@@ -74,7 +74,7 @@ export function UserDashboard() {
 
       setResults(resultsWithPaperNames);
 
-      const studentsResponse = await fetch('/Public/Assets/students.csv');
+      const studentsResponse = await fetch('/assets/students.csv');
       if (!studentsResponse.ok) {
         throw new Error(`Failed to fetch students.csv: ${studentsResponse.statusText}`);
       }
@@ -82,7 +82,7 @@ export function UserDashboard() {
       const parsedStudentsData = Papa.parse(studentsCsvText, { header: false });
       const filteredStudentData = parsedStudentsData.data.filter((row) => row.includes(enrolNo));
 
-      const institutesResponse = await fetch('/Public/Assets/institutes.csv');
+      const institutesResponse = await fetch('/assets/institutes.csv');
       if (!institutesResponse.ok) {
         throw new Error(`Failed to fetch institutes.csv: ${institutesResponse.statusText}`);
       }
@@ -90,7 +90,7 @@ export function UserDashboard() {
       const parsedInstitutesData = Papa.parse(institutesCsvText, { header: false });
       const instituteMap = new Map(parsedInstitutesData.data.map((row) => [row[0], row[1]]));
 
-      const programmesResponse = await fetch('/Public/Assets/programmes.csv');
+      const programmesResponse = await fetch('/assets/programmes.csv');
       if (!programmesResponse.ok) {
         throw new Error(`Failed to fetch programmes.csv: ${programmesResponse.statusText}`);
       }
