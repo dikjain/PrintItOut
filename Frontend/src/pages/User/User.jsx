@@ -14,7 +14,7 @@ export function UserDashboard() {
   const [loading, setLoading] = useState(false);
   const { mode: darkMode } = useOutletContext();
 
-  const enrolNo = useMemo(() => user ? `07414812723` : null, [user]);
+  const enrolNo = useMemo(() => user&&user.rollnumber.length===11 ? user.rollnumber : null, [user]);
 
   const themes = useMemo(() => ({
     dark: {

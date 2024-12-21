@@ -6,7 +6,7 @@ import { SignupPage } from '@/pages/auth/SignupPage';
 import { StudentDashboard } from '@/pages/student/Dashboard';
 import { AdminDashboard } from '@/pages/admin/Dashboard';
 import { AnimatePresence } from 'framer-motion';
-import { UserDashboard } from '@/pages/User/User';
+import { UserDashboard } from './pages/User/User';
 
 function App() {
   return (

@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 const signupSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
-  rollnumber: z.any(),
+  rollnumber: z.number().min(11, 'Roll number is required'),
   phone: z.string().min(10, 'Phone number must be at least 10 digits'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
   confirmPassword: z.string(),
@@ -103,7 +103,7 @@ export function SignupForm() {
       </div>
       <div>
         <Input
-          placeholder="Roll Number"
+          placeholder="Enrollment Number(11 digits)"
           {...register('rollnumber')}
         />
       </div>
