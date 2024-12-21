@@ -4,6 +4,8 @@
     "@nivo/line": "^0.88.0",
     "@nivo/pie": "^0.88.0",
     "chart.js": "^4.4.7",
+    "install": "^0.13.0",
+    "npm": "^11.0.0",
     "react-chartjs-2": "^5.2.0"
   }
 }
