@@ -51,12 +51,12 @@ export function UserDashboard() {
 
     setLoading(true);
     try {
-      const resultsResponse = await axios.get('Public/assets/results.csv');
+      const resultsResponse = await axios.get('https://raw.githubusercontent.com/dikjain/PrintItOut/refs/heads/main/Frontend/Public/Assets/results.csv');
       const resultsCsvText = resultsResponse.data;
       const parsedResultsData = Papa.parse(resultsCsvText, { header: false });
       const filteredResults = parsedResultsData.data.filter((row) => row.includes(enrolNo));
 
-      const subjectsResponse = await axios.get('Public/assets/subjects.csv');
+      const subjectsResponse = await axios.get('https://raw.githubusercontent.com/dikjain/PrintItOut/refs/heads/main/Frontend/Public/Assets/subjects.csv');
       const subjectsCsvText = subjectsResponse.data;
       const parsedSubjectsData = Papa.parse(subjectsCsvText, { header: false });
       const subjectMap = new Map(parsedSubjectsData.data.map((row) => [row[0], row[2]]));
@@ -69,17 +69,17 @@ export function UserDashboard() {
 
       setResults(resultsWithPaperNames);
 
-      const studentsResponse = await axios.get('Public/assets/students.csv');
+      const studentsResponse = await axios.get('https://raw.githubusercontent.com/dikjain/PrintItOut/refs/heads/main/Frontend/Public/Assets/students.csv');
       const studentsCsvText = studentsResponse.data;
       const parsedStudentsData = Papa.parse(studentsCsvText, { header: false });
       const filteredStudentData = parsedStudentsData.data.filter((row) => row.includes(enrolNo));
 
-      const institutesResponse = await axios.get('Public/assets/institutes.csv');
+      const institutesResponse = await axios.get('https://raw.githubusercontent.com/dikjain/PrintItOut/refs/heads/main/Frontend/Public/Assets/institutes.csv');
       const institutesCsvText = institutesResponse.data;
       const parsedInstitutesData = Papa.parse(institutesCsvText, { header: false });
       const instituteMap = new Map(parsedInstitutesData.data.map((row) => [row[0], row[1]]));
 
-      const programmesResponse = await axios.get('Public/assets/programmes.csv');
+      const programmesResponse = await axios.get('https://raw.githubusercontent.com/dikjain/PrintItOut/refs/heads/main/Frontend/Public/Assets/programmes.csv');
       const programmesCsvText = programmesResponse.data;
       const parsedProgrammesData = Papa.parse(programmesCsvText, { header: false });
       const programmeMap = new Map(parsedProgrammesData.data.map((row) => [row[0], row[1]]));
