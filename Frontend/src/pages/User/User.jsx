@@ -137,7 +137,7 @@ export function UserDashboard() {
   return (
     <PageTransition>
       <div 
-        className={`space-y-4 sm:space-y-6 p-4 sm:p-6 ${currentTheme.background} ${currentTheme.text} min-h-screen relative overflow-hidden`}
+        className={`space-y-4 sm:space-y-6 p-4 sm:p-6 ${currentTheme.background} ${currentTheme.text} rounded-3xl min-h-screen relative overflow-hidden`}
       >
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className={`absolute w-[500px] h-[500px] ${darkMode ? 'bg-green-500/10' : 'bg-blue-500/10'} rounded-full blur-[100px] -top-48 -left-48 mix-blend-overlay`}></div>
@@ -155,7 +155,7 @@ export function UserDashboard() {
               <h1 className={`text-2xl sm:text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient} tracking-tight [text-shadow:0_4px_8px_rgba(0,0,0,0.2)]`}>
                 Dashboard
               </h1>
-              <p className="mt-2 sm:mt-3 text-white/80 text-sm sm:text-lg md:text-xl font-light tracking-wide">Welcome back! Here's an overview of your performance.</p>
+              <p className={`mt-2 sm:mt-3  text-sm sm:text-lg md:text-xl font-light tracking-wide ${currentTheme.text}`}>Welcome back! Here's an overview of your performance.</p>
             </div>
           </div>
 

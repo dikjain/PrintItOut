@@ -39,7 +39,7 @@ export function StudentDashboard() {
   const [selectedAssignment, setSelectedAssignment] = useState<{id: string, title: string, pages: number} | null>(null);
   const [paymentAgreement, setPaymentAgreement] = useState(false);
   const [userUpiId, setUserUpiId] = useState("");
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true); // Set default to true for dark mode
   const [showQueryModal, setShowQueryModal] = useState(false);
   const [selectedQuery, setSelectedQuery] = useState<string | null>(null);
 
@@ -191,24 +191,28 @@ export function StudentDashboard() {
     dark: {
       background: "bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-900 via-black to-blue-900",
       text: "text-white",
-      cardBg: "backdrop-blur-2xl bg-white/[0.02]",
-      border: "border-white/[0.05]",
+      cardBg: "backdrop-blur-2xl bg-black/[0.7]",
+      border: "border-white/[0.1]",
       gradientOverlay: "from-green-500/[0.05] via-transparent to-blue-500/[0.05]",
-      accentGradient: "from-green-400 to-blue-400",
-      iconBg: "from-green-500/20 to-green-500/10",
-      progressBar1: "from-green-400 to-green-500",
-      progressBar2: "from-blue-400 to-blue-500"
+      accentGradient: "from-white to-gray-300",
+      iconBg: "from-white/20 to-white/10",
+      progressBar1: "from-white to-gray-300",
+      progressBar2: "from-gray-300 to-white",
+      buttonGradient: "bg-gradient-to-r from-green-500 to-blue-500",
+      hoverGradient: "hover:from-green-600 hover:to-blue-600"
     },
     light: {
-      background: "bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-100 via-white to-purple-100",
-      text: "text-gray-800",
-      cardBg: "backdrop-blur-2xl bg-white/[0.7]",
-      border: "border-gray-200",
-      gradientOverlay: "from-blue-500/[0.05] via-transparent to-purple-500/[0.05]",
-      accentGradient: "from-blue-500 to-purple-500",
-      iconBg: "from-blue-500/20 to-purple-500/10",
-      progressBar1: "from-blue-500 to-indigo-500",
-      progressBar2: "from-purple-500 to-pink-500"
+      background: "bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-gray-100 via-white to-gray-200",
+      text: "text-black",
+      cardBg: "backdrop-blur-2xl bg-white/[0.9]",
+      border: "border-black/[0.1]",
+      gradientOverlay: "from-gray-500/[0.05] via-transparent to-gray-500/[0.05]",
+      accentGradient: "from-black to-gray-800",
+      iconBg: "from-black/20 to-black/10",
+      progressBar1: "from-black to-gray-800",
+      progressBar2: "from-gray-800 to-black",
+      buttonGradient: "bg-gradient-to-r from-green-400 to-blue-400",
+      hoverGradient: "hover:from-green-500 hover:to-blue-500"
     }
   };
 
@@ -220,7 +224,7 @@ export function StudentDashboard() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75"
+        className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75"
       >
         <div className={cn("p-8 rounded-lg shadow-lg w-96", currentTheme.cardBg, currentTheme.text)}>
           <h2 className="text-xl font-semibold mb-4">Payment Required</h2>
@@ -231,16 +235,16 @@ export function StudentDashboard() {
               <div className="flex items-center gap-4 mb-2">
                 <img src={qrCodeUrl} alt="UPI QR Code" className="" />
                 <span className="-ml-1 mr-2">or</span>
-                <a href={upiUrl} target="_blank" rel="noopener noreferrer" className="bg-blue-500 text-white px-4 py-2 rounded-md">Pay</a>
+                <a href={upiUrl} target="_blank" rel="noopener noreferrer" className={cn("px-4 py-2 rounded-md", currentTheme.buttonGradient, currentTheme.hoverGradient, "text-white")}>Pay</a>
               </div>
-              <p className="mb-6 text-black/60 text-[10px]">Use the QR code above or the pay button to complete your payment</p>
+              <p className="mb-6 text-gray-400 text-[10px]">Use the QR code above or the pay button to complete your payment</p>
               <div className="flex flex-col space-y-4 w-full">
                 <label className="flex items-center space-x-2">
                   <input
                     type="checkbox"
                     checked={paymentAgreement}
                     onChange={(e) => setPaymentAgreement(e.target.checked)}
-                    className="form-checkbox h-4 w-4 text-blue-600"
+                    className="form-checkbox h-4 w-4 text-white"
                   />
                   <span className="text-sm">
                     I agree that I have paid the amount and understand that my account may be blocked if payment is not received
@@ -252,7 +256,7 @@ export function StudentDashboard() {
                     type="text"
                     value={userUpiId}
                     onChange={(e) => setUserUpiId(e.target.value)}
-                    className="form-input mt-1 block w-full px-2 py-1 rounded-md"
+                    className="form-input mt-1 block w-full px-2 py-1 rounded-md text-black"
                     placeholder="Enter your UPI ID"
                   />
                 </label>
@@ -263,14 +267,14 @@ export function StudentDashboard() {
                       setPaymentAgreement(false);
                       setUserUpiId("");
                     }}
-                    className="bg-red-500 text-white px-4 py-2 rounded-md"
+                    className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handlePaymentComplete}
                     disabled={!paymentAgreement || !userUpiId || isProcessing !== null}
-                    className={`${!paymentAgreement || !userUpiId || isProcessing !== null ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-500'} text-white px-4 py-2 rounded-md`}
+                    className={`${!paymentAgreement || !userUpiId || isProcessing !== null ? 'bg-gray-400 cursor-not-allowed' : cn(currentTheme.buttonGradient, currentTheme.hoverGradient)} px-4 py-2 rounded-md text-white`}
                   >
                     Payment Done
                   </button>
@@ -342,8 +346,8 @@ export function StudentDashboard() {
           </div>
           <div className="flex items-center space-x-4">
             <div className="flex-shrink-0">
-              <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center">
-                <User className="h-8 w-8" />
+              <div className={cn("h-12 w-12 rounded-full flex items-center justify-center backdrop-blur-lg", currentTheme.buttonGradient)}>
+                <User className="h-8 w-8 text-white" />
               </div>
             </div>
             <div>
@@ -400,33 +404,33 @@ export function StudentDashboard() {
                   getFilteredAssignments().map((assignment, index) => (
                     <React.Fragment key={assignment._id}>
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center">
+                        <div className="flex items-center flex-grow">
                           <div className="flex-shrink-0">
                             <FileText className="h-5 w-5" />
                           </div>
-                          <div className="ml-4">
-                            <p className="text-sm font-medium truncate sm:bold sm:whitespace-normal">{assignment.title}</p>
+                          <div className="ml-4 min-w-0 flex-grow">
+                            <p className="text-sm font-medium break-words max-w-[200px]">{assignment.title}</p>
                             <p className="text-sm">{assignment.pages} pages</p>
                           </div>
                         </div>
-                        <div className="flex items-center space-x-4">
+                        <div className="flex items-center space-x-4 flex-shrink-0">
                           <div className="text-sm underline">{window.innerWidth < 460  ? new Date(assignment.createdAt).toLocaleString().split(',')[0] : new Date(assignment.createdAt).toLocaleString()}</div>
                           <button
                             onClick={() => handlePrintAssignment(assignment._id, assignment.title, assignment.pages)}
                             disabled={isProcessing !== null}
-                            className={`${isProcessing !== null ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500'} text-white px-2 py-1 rounded-md`}
+                            className={`${isProcessing !== null ? 'bg-gray-400 cursor-not-allowed' : cn(currentTheme.buttonGradient, currentTheme.hoverGradient)} px-2 py-1 rounded-md text-white`}
                           >
                             Print
                           </button>
                           <button
                             onClick={() => handleShowQuery(assignment.query || "Questions are not available yet !!!")}
-                            className="bg-yellow-500 text-white px-2 py-1 rounded-md flex items-center"
+                            className={cn("backdrop-blur-lg px-2 py-1 rounded-md flex items-center", currentTheme.buttonGradient)}
                           >
-                            <MessageCircleQuestion className="h-5 w-5" />
+                            <MessageCircleQuestion className="h-5 w-5 text-white" />
                           </button>
                         </div>
                       </div>
-                      {index < getFilteredAssignments().length - 1 && <hr className="border-t border-gray-200 my-2" />}
+                      {index < getFilteredAssignments().length - 1 && <hr className="border-t border-gray-200/[0.1] my-2" />}
                     </React.Fragment>
                   ))
                 )}
@@ -437,13 +441,13 @@ export function StudentDashboard() {
       </div>
 
       {showQueryModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
           <div className={cn("p-8 rounded-lg shadow-lg w-[90%] max-w-3xl max-h-full overflow-y-auto", currentTheme.cardBg, currentTheme.text)}>
             <h2 className="text-xl font-semibold mb-4">Assignment Questions</h2>
             <p className="mb-4">{selectedQuery}</p>
             <button
               onClick={() => setShowQueryModal(false)}
-              className="bg-red-500 text-white px-4 py-2 rounded-md"
+              className={cn("px-4 py-2 rounded-md text-white", currentTheme.buttonGradient, currentTheme.hoverGradient)}
             >
               Close
             </button>
