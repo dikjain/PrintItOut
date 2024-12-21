@@ -52,17 +52,15 @@ export function UserDashboard() {
 
     setLoading(true);
     try {
-      const resultsResponse = await fetch('/Assets/results.csv');
+      const resultsResponse = await fetch('./Assets/results.csv');
       const resultsCsvText = await resultsResponse.text();
       const parsedResultsData = Papa.parse(resultsCsvText, { header: false });
       const filteredResults = parsedResultsData.data.filter((row) => row.includes(enrolNo));
-      resultsResponse.body.cancel(); // Remove file from memory
 
-      const subjectsResponse = await fetch('/Assets/subjects.csv');
+      const subjectsResponse = await fetch('./Assets/subjects.csv');
       const subjectsCsvText = await subjectsResponse.text();
       const parsedSubjectsData = Papa.parse(subjectsCsvText, { header: false });
       const subjectMap = new Map(parsedSubjectsData.data.map((row) => [row[0], row[2]]));
-      subjectsResponse.body.cancel(); // Remove file from memory
 
       const resultsWithPaperNames = filteredResults.map((row) => {
         const subCode = row[2];
@@ -72,23 +70,20 @@ export function UserDashboard() {
 
       setResults(resultsWithPaperNames);
 
-      const studentsResponse = await fetch('/Assets/students.csv');
+      const studentsResponse = await fetch('./Assets/students.csv');
       const studentsCsvText = await studentsResponse.text();
       const parsedStudentsData = Papa.parse(studentsCsvText, { header: false });
       const filteredStudentData = parsedStudentsData.data.filter((row) => row.includes(enrolNo));
-      studentsResponse.body.cancel(); // Remove file from memory
 
-      const institutesResponse = await fetch('/Assets/institutes.csv');
+      const institutesResponse = await fetch('./Assets/institutes.csv');
       const institutesCsvText = await institutesResponse.text();
       const parsedInstitutesData = Papa.parse(institutesCsvText, { header: false });
       const instituteMap = new Map(parsedInstitutesData.data.map((row) => [row[0], row[1]]));
-      institutesResponse.body.cancel(); // Remove file from memory
 
-      const programmesResponse = await fetch('/Assets/programmes.csv');
+      const programmesResponse = await fetch('./Assets/programmes.csv');
       const programmesCsvText = await programmesResponse.text();
       const parsedProgrammesData = Papa.parse(programmesCsvText, { header: false });
       const programmeMap = new Map(parsedProgrammesData.data.map((row) => [row[0], row[1]]));
-      programmesResponse.body.cancel(); // Remove file from memory
 
       const studentDataWithNames = filteredStudentData.map((row) => {
         const instCode = row[2];
