@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@nivo/core": "^0.88.0",
+    "@nivo/line": "^0.88.0",
+    "@nivo/pie": "^0.88.0",
+    "chart.js": "^4.4.7",
+    "react-chartjs-2": "^5.2.0"
+  }
+}

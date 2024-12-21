@@ -5,7 +5,6 @@ import { useAuth } from '../../context';
 import { useNavigate, Outlet, useOutletContext } from 'react-router-dom';
 import { FaSpinner } from 'react-icons/fa';
 import Switch from 'react-switch';
-import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { User } from '@/types';
 

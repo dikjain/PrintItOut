@@ -187,6 +187,33 @@ export function StudentDashboard() {
     setShowQueryModal(true);
   };
 
+  const themes = {
+    dark: {
+      background: "bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-green-900 via-black to-blue-900",
+      text: "text-white",
+      cardBg: "backdrop-blur-2xl bg-white/[0.02]",
+      border: "border-white/[0.05]",
+      gradientOverlay: "from-green-500/[0.05] via-transparent to-blue-500/[0.05]",
+      accentGradient: "from-green-400 to-blue-400",
+      iconBg: "from-green-500/20 to-green-500/10",
+      progressBar1: "from-green-400 to-green-500",
+      progressBar2: "from-blue-400 to-blue-500"
+    },
+    light: {
+      background: "bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-100 via-white to-purple-100",
+      text: "text-gray-800",
+      cardBg: "backdrop-blur-2xl bg-white/[0.7]",
+      border: "border-gray-200",
+      gradientOverlay: "from-blue-500/[0.05] via-transparent to-purple-500/[0.05]",
+      accentGradient: "from-blue-500 to-purple-500",
+      iconBg: "from-blue-500/20 to-purple-500/10",
+      progressBar1: "from-blue-500 to-indigo-500",
+      progressBar2: "from-purple-500 to-pink-500"
+    }
+  };
+
+  const currentTheme = darkMode ? themes.dark : themes.light;
+
   if (showQR) {
     return (
       <motion.div
@@ -195,7 +222,7 @@ export function StudentDashboard() {
         transition={{ duration: 0.5 }}
         className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75"
       >
-        <div className={cn("bg-white p-8 rounded-lg shadow-lg w-96", darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900")}>
+        <div className={cn("p-8 rounded-lg shadow-lg w-96", currentTheme.cardBg, currentTheme.text)}>
           <h2 className="text-xl font-semibold mb-4">Payment Required</h2>
           <p className="text-red-500 mb-2 text-[12px]">Note: if you don't pay the amount, we won't print your assignment ( every payment is checked )</p>
           <p className="mb-4">Amount to pay: ₹{selectedAssignment ? selectedAssignment.pages * 3 : 0}</p>
@@ -265,11 +292,11 @@ export function StudentDashboard() {
             <h1 className="text-2xl font-semibold">Print History</h1>
             <p className="mt-1 text-sm">Here is the history of your prints.</p>
           </div>
-          <div className={cn("bg-white shadow rounded-lg", darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900")}>
+          <div className={cn("shadow rounded-lg", currentTheme.cardBg, currentTheme.text)}>
             <div className="px-4 py-5 sm:px-6">
               <h2 className="text-lg font-medium">Your Prints</h2>
             </div>
-            <div className="border-t border-gray-200">
+            <div className={currentTheme.border}>
               <div className="px-4 py-5 sm:p-6">
                 <div className="space-y-4">
                   {historyPrints.length === 0 ? (
@@ -327,7 +354,7 @@ export function StudentDashboard() {
         </div>
 
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          <div className={cn("bg-white overflow-hidden shadow rounded-lg", darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900")}>
+          <div className={cn("overflow-hidden shadow rounded-lg", currentTheme.cardBg, currentTheme.text)}>
             <div className="p-5">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
@@ -343,7 +370,7 @@ export function StudentDashboard() {
             </div>
           </div>
 
-          <div className={cn("bg-white overflow-hidden shadow rounded-lg", darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900")}>
+          <div className={cn("overflow-hidden shadow rounded-lg", currentTheme.cardBg, currentTheme.text)}>
             <div className="p-5">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
@@ -360,11 +387,11 @@ export function StudentDashboard() {
           </div>
         </div>
 
-        <div className={cn("bg-white shadow rounded-lg", darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900")}>
+        <div className={cn("shadow rounded-lg", currentTheme.cardBg, currentTheme.text)}>
           <div className="px-4 py-5 sm:px-6">
             <h2 className="text-lg font-medium">Admin Assignments</h2>
           </div>
-          <div className="border-t border-gray-200">
+          <div className={currentTheme.border}>
             <div className="px-4 py-5 sm:p-6">
               <div className="space-y-4">
                 {getFilteredAssignments().length === 0 ? (
@@ -411,7 +438,7 @@ export function StudentDashboard() {
 
       {showQueryModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75">
-          <div className={cn("bg-white p-8 rounded-lg shadow-lg w-[90%] max-w-3xl max-h-full overflow-y-auto", darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900")}>
+          <div className={cn("p-8 rounded-lg shadow-lg w-[90%] max-w-3xl max-h-full overflow-y-auto", currentTheme.cardBg, currentTheme.text)}>
             <h2 className="text-xl font-semibold mb-4">Assignment Questions</h2>
             <p className="mb-4">{selectedQuery}</p>
             <button
