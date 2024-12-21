@@ -430,7 +430,7 @@ export function StudentDashboard() {
                           </div>
                         </div>
                         <div className="flex items-center space-x-4 flex-shrink-0">
-                          <div className={`text-xl underline p-1 ${window.innerWidth < 460  ? "text-[8px]" : "text-sm"}`}  >{window.innerWidth < 460  ? new Date(assignment.createdAt).toLocaleString().split(',')[0] : new Date(assignment.createdAt).toLocaleString()}</div>
+                          <div className={`underline p-1 ${window.innerWidth < 460  ? "text-[8px]" : "text-sm"}`}  >{window.innerWidth < 460  ? new Date(assignment.createdAt).toLocaleString().split(',')[0] : new Date(assignment.createdAt).toLocaleString()}</div>
                           <button
                             onClick={() => handlePrintAssignment(assignment._id, assignment.title, assignment.pages)}
                             disabled={isProcessing !== null}
