@@ -5,3 +5,29 @@
 * {
   scrollbar-width: none;
 }
+
+.ops{
+  box-shadow: 0 0 10px 0 green;
+  border: 1px solid green;
+}
+.ops:hover{
+  box-shadow: 0 0 20px 0 darkgreen;
+  background-color: darkgreen;
+}
+.lops{
+  box-shadow: 0 0 10px 0 blue;
+  border: 1px solid blue;
+}
+.lops:hover{
+  box-shadow: 0 0 20px 0 darkblue;
+  background-color: darkblue;
+}
+
+.zop{
+  box-shadow: 0 0 10px 0 blue;
+  border: 1px solid blue;
+}
+.zop:hover{
+  box-shadow: 0 0 20px 0 darkblue;
+  background-color: darkblue;
+}

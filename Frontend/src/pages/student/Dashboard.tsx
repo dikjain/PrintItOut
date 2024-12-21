@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Printer, User, History, Moon, Sun, MessageCircleQuestion } from 'lucide-react';
+import { FileText, Printer, User, MessageCircleQuestion } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '@/context';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useOutletContext } from 'react-router-dom';
 import QRCode from 'qrcode';
 import { motion } from 'framer-motion';
 import { PageTransition } from '@/components/animations/PageTransition';
@@ -25,9 +25,25 @@ interface Print {
   status?: string;
 }
 
+interface User {
+  _id: string;
+  username: string;
+  rollnumber: string;
+  print: Print[];
+}
+
+interface AuthContextType {
+  user: User | null;
+  setUser: (user: User | null) => void;
+}
+
+interface OutletContextType {
+  mode: boolean;
+}
+
 export function StudentDashboard() {
   const [assignments, setAssignments] = useState<Assignment[]>([]);
-  const { user, setUser } = useAuth();
+  const { user, setUser } = useAuth() as AuthContextType;
   const navigate = useNavigate();
   const location = useLocation();
   const [prints, setPrints] = useState<Print[]>([]);
@@ -39,7 +55,7 @@ export function StudentDashboard() {
   const [selectedAssignment, setSelectedAssignment] = useState<{id: string, title: string, pages: number} | null>(null);
   const [paymentAgreement, setPaymentAgreement] = useState(false);
   const [userUpiId, setUserUpiId] = useState("");
-  const [darkMode, setDarkMode] = useState(true); // Set default to true for dark mode
+  const { mode: darkMode } = useOutletContext<OutletContextType>();
   const [showQueryModal, setShowQueryModal] = useState(false);
   const [selectedQuery, setSelectedQuery] = useState<string | null>(null);
 
@@ -393,7 +409,7 @@ export function StudentDashboard() {
 
         <div className={cn("shadow rounded-lg", currentTheme.cardBg, currentTheme.text)}>
           <div className="px-4 py-5 sm:px-6">
-            <h2 className="text-lg font-medium">Admin Assignments</h2>
+            <h2 className="text-lg font-medium">Available Assignments</h2>
           </div>
           <div className={currentTheme.border}>
             <div className="px-4 py-5 sm:p-6">
@@ -414,17 +430,17 @@ export function StudentDashboard() {
                           </div>
                         </div>
                         <div className="flex items-center space-x-4 flex-shrink-0">
-                          <div className="text-sm underline">{window.innerWidth < 460  ? new Date(assignment.createdAt).toLocaleString().split(',')[0] : new Date(assignment.createdAt).toLocaleString()}</div>
+                          <div className={`text-xl underline p-1 ${window.innerWidth < 460  ? "text-[8px]" : "text-sm"}`}  >{window.innerWidth < 460  ? new Date(assignment.createdAt).toLocaleString().split(',')[0] : new Date(assignment.createdAt).toLocaleString()}</div>
                           <button
                             onClick={() => handlePrintAssignment(assignment._id, assignment.title, assignment.pages)}
                             disabled={isProcessing !== null}
-                            className={`${isProcessing !== null ? 'bg-gray-400 cursor-not-allowed' : cn(currentTheme.buttonGradient, currentTheme.hoverGradient)} px-2 py-1 rounded-md text-white`}
+                            className={`${isProcessing !== null ? 'bg-gray-400 cursor-not-allowed' : darkMode ? "bg-green-500/30 text-white ops" : "bg-blue-500 text-white "} px-2 py-1 rounded-md `}
                           >
                             Print
                           </button>
                           <button
                             onClick={() => handleShowQuery(assignment.query || "Questions are not available yet !!!")}
-                            className={cn("backdrop-blur-lg px-2 py-1 rounded-md flex items-center", currentTheme.buttonGradient)}
+                            className={`backdrop-blur-lg px-2 py-1 rounded-md flex items-center ${darkMode ? "bg-blue-500/30 zop text-white " : "bg-green-500 text-white "}`}
                           >
                             <MessageCircleQuestion className="h-5 w-5 text-white" />
                           </button>

@@ -184,7 +184,7 @@ export function DashboardLayout() {
               <Menu className="h-6 w-6" />
             </button>
           </div>
-          <main className="flex-1 overflow-y-auto p-6">
+          <main className={`flex-1 overflow-y-auto p-6 ${window.innerWidth < 460 ? "p-[10px]" : "p-6"}`}>
             <PageTransition>
               <Outlet context={{ mode: darkMode }} />
             </PageTransition>

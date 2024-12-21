@@ -183,7 +183,7 @@ export function UserDashboard() {
                         <FiUser className={`text-2xl sm:text-4xl ${darkMode ? 'text-green-400' : 'text-blue-500'}`} />
                       </div>
                       <div>
-                        <h3 className={`text-lg sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>{studentData.name}</h3>
+                        <h3 className={`text-lg sm:text-2xl font-bold bg-clip-text bg-gradient-to-r ${darkMode ? 'text-white' : 'text-blue-500'}`}>{studentData.name}</h3>
                         <p className={`${currentTheme.text}/80 text-sm sm:text-lg font-light`}>{studentData.rollNo}</p>
                       </div>
                     </div>
@@ -209,7 +209,7 @@ export function UserDashboard() {
                           <FiAward className={`text-2xl sm:text-4xl ${darkMode ? 'text-blue-400' : 'text-purple-500'}`} />
                         </div>
                         <div>
-                          <h3 className={`text-lg sm:text-2xl font-bold bg-clip-text bg-gradient-to-r ${darkMode ? 'text-green-400' : 'text-blue-500'}`}>CGPA</h3>
+                          <h3 className={`text-lg sm:text-2xl font-bold bg-clip-text bg-gradient-to-r ${darkMode ? 'text-white' : 'text-blue-500'}`}>CGPA</h3>
                           <p className={`text-2xl sm:text-4xl font-black mt-1 sm:mt-2 text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>
                             {calculateCGPA(results)}
                           </p>
