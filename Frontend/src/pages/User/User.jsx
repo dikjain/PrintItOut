@@ -11,8 +11,6 @@ export function UserDashboard() {
   const [results, setResults] = useState([]);
   const [studentData, setStudentData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [selectedSemester, setSelectedSemester] = useState('overall');
-  const [chartType, setChartType] = useState('pie');
   const { mode: darkMode } = useOutletContext();
 
   const enrolNo = useMemo(() => user ? `07414812723` : null, [user]);
@@ -52,12 +50,18 @@ export function UserDashboard() {
 
     setLoading(true);
     try {
-      const resultsResponse = await fetch('"../../../Public/Assets/results.csv');
+      const resultsResponse = await fetch('/Public/Assets/results.csv');
+      if (!resultsResponse.ok) {
+        throw new Error(`Failed to fetch results.csv: ${resultsResponse.statusText}`);
+      }
       const resultsCsvText = await resultsResponse.text();
       const parsedResultsData = Papa.parse(resultsCsvText, { header: false });
       const filteredResults = parsedResultsData.data.filter((row) => row.includes(enrolNo));
 
-      const subjectsResponse = await fetch('../../../Public/Assets/subjects.csv');
+      const subjectsResponse = await fetch('/Public/Assets/subjects.csv');
+      if (!subjectsResponse.ok) {
+        throw new Error(`Failed to fetch subjects.csv: ${subjectsResponse.statusText}`);
+      }
       const subjectsCsvText = await subjectsResponse.text();
       const parsedSubjectsData = Papa.parse(subjectsCsvText, { header: false });
       const subjectMap = new Map(parsedSubjectsData.data.map((row) => [row[0], row[2]]));
@@ -70,17 +74,26 @@ export function UserDashboard() {
 
       setResults(resultsWithPaperNames);
 
-      const studentsResponse = await fetch('../../../Public/Assets/students.csv');
+      const studentsResponse = await fetch('/Public/Assets/students.csv');
+      if (!studentsResponse.ok) {
+        throw new Error(`Failed to fetch students.csv: ${studentsResponse.statusText}`);
+      }
       const studentsCsvText = await studentsResponse.text();
       const parsedStudentsData = Papa.parse(studentsCsvText, { header: false });
       const filteredStudentData = parsedStudentsData.data.filter((row) => row.includes(enrolNo));
 
-      const institutesResponse = await fetch('../../../Public/Assets/institutes.csv');
+      const institutesResponse = await fetch('/Public/Assets/institutes.csv');
+      if (!institutesResponse.ok) {
+        throw new Error(`Failed to fetch institutes.csv: ${institutesResponse.statusText}`);
+      }
       const institutesCsvText = await institutesResponse.text();
       const parsedInstitutesData = Papa.parse(institutesCsvText, { header: false });
       const instituteMap = new Map(parsedInstitutesData.data.map((row) => [row[0], row[1]]));
 
-      const programmesResponse = await fetch('../../../Public/Assets/programmes.csv');
+      const programmesResponse = await fetch('/Public/Assets/programmes.csv');
+      if (!programmesResponse.ok) {
+        throw new Error(`Failed to fetch programmes.csv: ${programmesResponse.statusText}`);
+      }
       const programmesCsvText = await programmesResponse.text();
       const parsedProgrammesData = Papa.parse(programmesCsvText, { header: false });
       const programmeMap = new Map(parsedProgrammesData.data.map((row) => [row[0], row[1]]));
@@ -104,7 +117,7 @@ export function UserDashboard() {
 
     } catch (error) {
       console.error('Error fetching data:', error);
-      alert('Error fetching data.');
+      alert('An error occurred while fetching data.');
     } finally {
       setLoading(false);
     }
@@ -135,53 +148,11 @@ export function UserDashboard() {
     return (totalMarks / totalSubjects / 10).toFixed(2);
   }, []);
 
-  const getPieData = useCallback((results) => {
-    const filteredResults = selectedSemester === 'overall' 
-      ? results 
-      : results.filter(result => result[7] === selectedSemester);
-
-    return filteredResults.map(result => ({
-      id: result[2],
-      label: result[2],
-      value: parseFloat(result[6]),
-      color: `hsl(${Math.random() * 360}, 70%, 50%)`
-    }));
-  }, [selectedSemester]);
-
-  const getBarData = useCallback((results) => {
-    const filteredResults = selectedSemester === 'overall'
-      ? results
-      : results.filter(result => result[7] === selectedSemester);
-
-    return filteredResults.map(result => ({
-      subject: result[2],
-      marks: parseFloat(result[6]),
-      marksColor: `hsl(${Math.random() * 360}, 70%, 50%)`
-    }));
-  }, [selectedSemester]);
-
-  const getScatterData = useCallback((results) => {
-    const filteredResults = selectedSemester === 'overall'
-      ? results
-      : results.filter(result => result[7] === selectedSemester);
-
-    return [{
-      id: 'Performance',
-      data: filteredResults.map(result => ({
-        x: parseFloat(result[4]),
-        y: parseFloat(result[5]),
-        size: parseFloat(result[6]) / 2,
-        subject: result[2]
-      }))
-    }];
-  }, [selectedSemester]);
-
   return (
     <PageTransition>
       <div 
         className={`space-y-6 p-6 ${currentTheme.background} ${currentTheme.text} min-h-screen relative overflow-hidden`}
       >
-        {/* Enhanced background elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className={`absolute w-[500px] h-[500px] ${darkMode ? 'bg-green-500/10' : 'bg-blue-500/10'} rounded-full blur-[100px] -top-48 -left-48 mix-blend-overlay`}></div>
           <div className={`absolute w-[500px] h-[500px] ${darkMode ? 'bg-blue-500/10' : 'bg-purple-500/10'} rounded-full blur-[100px] -bottom-48 -right-48 mix-blend-overlay delay-1000`}></div>
