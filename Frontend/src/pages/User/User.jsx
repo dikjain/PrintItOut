@@ -5,6 +5,8 @@ import { PageTransition } from '@/components/animations/PageTransition';
 import Papa from 'papaparse';
 import { FiUser, FiBook, FiAward, FiBarChart2 } from 'react-icons/fi';
 import axios from 'axios';
+import { Line } from 'react-chartjs-2';
+import 'chart.js/auto';
 
 export function UserDashboard() {
   const { user } = useAuth();
@@ -13,6 +15,7 @@ export function UserDashboard() {
   const [studentData, setStudentData] = useState(null);
   const [loading, setLoading] = useState(false);
   const { mode: darkMode } = useOutletContext();
+  const [selectedSemester, setSelectedSemester] = useState('1');
 
   const enrolNo = useMemo(() => user&&user.rollnumber.length===11 ? user.rollnumber : null, [user]);
 
@@ -134,6 +137,35 @@ export function UserDashboard() {
     return (totalMarks / totalSubjects / 10).toFixed(2);
   }, []);
 
+  const semesterData = useMemo(() => {
+    const sem1Results = results.filter(result => result[7] === '1');
+    const sem2Results = results.filter(result => result[7] === '2');
+    return {
+      sem1: {
+        labels: sem1Results.map(result => result[2]),
+        datasets: [{
+          label: 'Semester 1 Marks',
+          data: sem1Results.map(result => result[6]),
+          borderColor: darkMode ? 'rgba(0, 255, 0, 0.6)' : 'rgba(0, 0, 255, 0.6)',
+          backgroundColor: darkMode ? 'rgba(0, 255, 0, 0.2)' : 'rgba(0, 0, 255, 0.2)',
+          fill: false,
+          tension: 0.1
+        }]
+      },
+      sem2: {
+        labels: sem2Results.map(result => result[2]),
+        datasets: [{
+          label: 'Semester 2 Marks',
+          data: sem2Results.map(result => result[6]),
+          borderColor: darkMode ? 'rgba(0, 0, 255, 0.6)' : 'rgba(255, 0, 255, 0.6)',
+          backgroundColor: darkMode ? 'rgba(0, 0, 255, 0.2)' : 'rgba(255, 0, 255, 0.2)',
+          fill: false,
+          tension: 0.1
+        }]
+      }
+    };
+  }, [results, darkMode]);
+
   return (
     <PageTransition>
       <div 
@@ -250,9 +282,66 @@ export function UserDashboard() {
                   </div>
                 </div>
 
-                <div className="space-y-6 sm:space-y-10">
+                <div className="space-y-6 sm:space-y-10 relative z-50">
                   <div>
-                    <h3 className={`text-xl sm:text-3xl font-bold mb-4 sm:mb-8 text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>Semester 1 Subjects</h3>
+                    <h3 className={`text-xl sm:text-3xl font-bold mb-4 sm:mb-8 text-transparent bg-clip-text bg-gradient-to-r ${darkMode ? "text-white" : "text-black"} underline`} style={{ textDecorationColor: darkMode ? "green" : "blue" }}>Semester-wise Subjects</h3>
+                    <div className="flex justify-center mb-4">
+                      <button 
+                        className={`px-4 py-2 rounded-l-full  ${selectedSemester === '1' ? darkMode ? "bg-gradient-to-b from-transparent via-transparent to-green-500/40" : "bg-green-500" : currentTheme.cardBg} ${selectedSemester === '1' ? 'text-white' : currentTheme.text}`}
+                        onClick={() => setSelectedSemester('1')}
+                      >
+                        Semester 1
+                      </button>
+                      <button 
+                        className={`px-4 py-2 rounded-r-full ${selectedSemester === '2' ? darkMode ? "bg-gradient-to-b from-transparent via-transparent to-green-500/40" : "bg-green-500" : currentTheme.cardBg} ${selectedSemester === '2' ? 'text-white' : currentTheme.text}`}
+                        onClick={() => setSelectedSemester('2')}
+                      >
+                        Semester 2
+                      </button>
+                    </div>
+                    <div className="relative h-64 w-full">
+                      <Line 
+                        data={selectedSemester === '1' ? semesterData.sem1 : semesterData.sem2}
+                        options={{
+                          scales: {
+                            y: {
+                              beginAtZero: true,
+                              max: 100,
+                              ticks: {
+                                font: {
+                                  size: window.innerWidth > 1024 ? 14 : 10
+                                }
+                              }
+                            },
+                            x: {
+                              ticks: {
+                                font: {
+                                  size: window.innerWidth > 1024 ? 14 : 6
+                                }
+                              }
+                            }
+                          },
+                          plugins: {
+                            legend: {
+                              display: false
+                            },
+                            tooltip: {
+                              bodyFont: {
+                                size: window.innerWidth < 460 ? 10 : 12
+                              },
+                              titleFont: {
+                                size: window.innerWidth < 460 ? 12 : 14
+                              }
+                            }
+                          },
+                          maintainAspectRatio: false
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className={`text-xl sm:text-3xl font-bold mb-4 sm:mb-8 text-transparent bg-clip-text bg-gradient-to-r ${darkMode ? "text-white" : "text-black"} underline`} style={{ textDecorationColor: darkMode ? "green" : "blue" }}>Semester 1 Subjects</h3>
                     <div className="flex overflow-x-auto space-x-4 sm:space-x-6 pb-4 h-fit relative auto-scroll scrollbar-hide">
                       {results.filter(result => result[7] === '1').map((result, index) => (
                         <div
@@ -288,7 +377,7 @@ export function UserDashboard() {
                   </div>
 
                   <div>
-                    <h3 className={`text-xl sm:text-3xl font-bold mb-4 sm:mb-8 text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>Semester 2 Subjects</h3>
+                    <h3 className={`text-xl sm:text-3xl font-bold mb-4 sm:mb-8 text-transparent bg-clip-text bg-gradient-to-r ${darkMode ? "text-white" : "text-black"} underline`} style={{ textDecorationColor: darkMode ? "green" : "blue" }}>Semester 2 Subjects</h3>
                     <div className="flex overflow-x-auto space-x-4 sm:space-x-6 pb-4 auto-scroll scrollbar-hide">
                       {results.filter(result => result[7] === '2').map((result, index) => (
                         <div
