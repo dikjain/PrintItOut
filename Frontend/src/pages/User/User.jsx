@@ -137,7 +137,7 @@ export function UserDashboard() {
   return (
     <PageTransition>
       <div 
-        className={`space-y-6 p-6 ${currentTheme.background} ${currentTheme.text} min-h-screen relative overflow-hidden`}
+        className={`space-y-4 sm:space-y-6 p-4 sm:p-6 ${currentTheme.background} ${currentTheme.text} min-h-screen relative overflow-hidden`}
       >
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className={`absolute w-[500px] h-[500px] ${darkMode ? 'bg-green-500/10' : 'bg-blue-500/10'} rounded-full blur-[100px] -top-48 -left-48 mix-blend-overlay`}></div>
@@ -147,52 +147,52 @@ export function UserDashboard() {
         </div>
 
         <div className="relative z-10">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col md:flex-row items-center justify-between">
             <div
-              className={`${currentTheme.cardBg} p-8 rounded-3xl border ${currentTheme.border} shadow-2xl relative overflow-hidden group`}
+              className={`${currentTheme.cardBg} p-4 sm:p-8 rounded-2xl sm:rounded-3xl border ${currentTheme.border} shadow-2xl relative overflow-hidden group w-full`}
             >
               <div className={`absolute inset-0 bg-gradient-to-r ${currentTheme.gradientOverlay} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
-              <h1 className={`text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient} tracking-tight [text-shadow:0_4px_8px_rgba(0,0,0,0.2)]`}>
+              <h1 className={`text-2xl sm:text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient} tracking-tight [text-shadow:0_4px_8px_rgba(0,0,0,0.2)]`}>
                 Dashboard
               </h1>
-              <p className="mt-3 text-white/80 text-xl font-light tracking-wide">Welcome back! Here's an overview of your performance.</p>
+              <p className="mt-2 sm:mt-3 text-white/80 text-sm sm:text-lg md:text-xl font-light tracking-wide">Welcome back! Here's an overview of your performance.</p>
             </div>
           </div>
 
           <div 
-            className={`${currentTheme.cardBg} rounded-3xl p-10 border ${currentTheme.border} shadow-2xl mt-8 relative overflow-hidden group`}
+            className={`${currentTheme.cardBg} rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-10 border ${currentTheme.border} shadow-2xl mt-4 sm:mt-8 relative overflow-hidden group`}
           >
             <div className={`absolute inset-0 bg-gradient-to-br ${currentTheme.gradientOverlay}`}></div>
             {loading ? (
               <div 
                 className="flex justify-center items-center h-40"
               >
-                <div className={`w-16 h-16 border-4 ${darkMode ? 'border-green-400' : 'border-blue-400'} border-t-transparent rounded-full animate-spin shadow-lg`}></div>
+                <div className={`w-12 sm:w-16 h-12 sm:h-16 border-4 ${darkMode ? 'border-green-400' : 'border-blue-400'} border-t-transparent rounded-full animate-spin shadow-lg`}></div>
               </div>
             ) : results.length > 0 && studentData ? (
               <div 
-                className="space-y-10"
+                className="space-y-6 sm:space-y-10"
               >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
                   <div 
-                    className={`${currentTheme.cardBg} p-8 rounded-3xl border ${currentTheme.border} shadow-2xl hover:shadow-3xl transition-all duration-300 relative overflow-hidden group`}
+                    className={`${currentTheme.cardBg} p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border ${currentTheme.border} shadow-2xl hover:shadow-3xl transition-all duration-300 relative overflow-hidden group`}
                   >
                     <div className={`absolute inset-0 bg-gradient-to-br ${currentTheme.gradientOverlay} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
-                    <div className="flex items-center space-x-6">
-                      <div className={`p-4 bg-gradient-to-br ${currentTheme.iconBg} rounded-2xl backdrop-blur-xl`}>
-                        <FiUser className={`text-4xl ${darkMode ? 'text-green-400' : 'text-blue-500'}`} />
+                    <div className="flex items-center space-x-4 sm:space-x-6">
+                      <div className={`p-3 sm:p-4 bg-gradient-to-br ${currentTheme.iconBg} rounded-xl sm:rounded-2xl backdrop-blur-xl`}>
+                        <FiUser className={`text-2xl sm:text-4xl ${darkMode ? 'text-green-400' : 'text-blue-500'}`} />
                       </div>
                       <div>
-                        <h3 className={`text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>{studentData.name}</h3>
-                        <p className={`${currentTheme.text}/80 text-lg font-light`}>{studentData.rollNo}</p>
+                        <h3 className={`text-lg sm:text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>{studentData.name}</h3>
+                        <p className={`${currentTheme.text}/80 text-sm sm:text-lg font-light`}>{studentData.rollNo}</p>
                       </div>
                     </div>
-                    <div className="mt-6 space-y-3">
-                      <p className="flex items-center space-x-3">
+                    <div className="mt-4 sm:mt-6 space-y-2 sm:space-y-3">
+                      <p className="flex items-center space-x-2 sm:space-x-3 text-sm sm:text-base">
                         <FiBook className={darkMode ? 'text-green-400' : 'text-blue-500'} />
                         <span className={`${currentTheme.text}/80 font-light`}>{studentData.instituteName}</span>
                       </p>
-                      <p className="flex items-center space-x-3">
+                      <p className="flex items-center space-x-2 sm:space-x-3 text-sm sm:text-base">
                         <FiBarChart2 className={darkMode ? 'text-blue-400' : 'text-purple-500'} />
                         <span className={`${currentTheme.text}/80 font-light`}>{studentData.programme} | Batch {studentData.batchYear}</span>
                       </p>
@@ -200,46 +200,46 @@ export function UserDashboard() {
                   </div>
 
                   <div 
-                    className={`${currentTheme.cardBg} p-8 rounded-3xl border ${currentTheme.border} shadow-2xl hover:shadow-3xl transition-all duration-300 relative overflow-hidden group`}
+                    className={`${currentTheme.cardBg} p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border ${currentTheme.border} shadow-2xl hover:shadow-3xl transition-all duration-300 relative overflow-hidden group`}
                   >
                     <div className={`absolute inset-0 bg-gradient-to-br ${currentTheme.gradientOverlay} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
-                    <div className="flex flex-col space-y-6">
-                      <div className="flex items-center space-x-6">
-                        <div className={`p-4 bg-gradient-to-br ${currentTheme.iconBg} rounded-2xl backdrop-blur-xl`}>
-                          <FiAward className={`text-4xl ${darkMode ? 'text-blue-400' : 'text-purple-500'}`} />
+                    <div className="flex flex-col space-y-4 sm:space-y-6">
+                      <div className="flex items-center space-x-4 sm:space-x-6">
+                        <div className={`p-3 sm:p-4 bg-gradient-to-br ${currentTheme.iconBg} rounded-xl sm:rounded-2xl backdrop-blur-xl`}>
+                          <FiAward className={`text-2xl sm:text-4xl ${darkMode ? 'text-blue-400' : 'text-purple-500'}`} />
                         </div>
                         <div>
-                          <h3 className={`text-2xl font-bold  bg-clip-text bg-gradient-to-r ${darkMode ? 'text-green-400' : 'text-blue-500'}`}>CGPA</h3>
-                          <p className={`text-4xl font-black mt-2 text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>
+                          <h3 className={`text-lg sm:text-2xl font-bold bg-clip-text bg-gradient-to-r ${darkMode ? 'text-green-400' : 'text-blue-500'}`}>CGPA</h3>
+                          <p className={`text-2xl sm:text-4xl font-black mt-1 sm:mt-2 text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>
                             {calculateCGPA(results)}
                           </p>
                         </div>
                       </div>
 
-                      <div className="mt-4">
-                        <p className={`text-sm ${currentTheme.text}/80 mb-4 font-light`}>Semester-wise GPA:</p>
-                        <div className="space-y-4">
+                      <div className="mt-2 sm:mt-4">
+                        <p className={`text-xs sm:text-sm ${currentTheme.text}/80 mb-3 sm:mb-4 font-light`}>Semester-wise GPA:</p>
+                        <div className="space-y-3 sm:space-y-4">
                           <div>
-                            <div className="flex justify-between text-sm mb-2">
+                            <div className="flex justify-between text-xs sm:text-sm mb-1 sm:mb-2">
                               <span className={`${currentTheme.text}/80 font-light`}>Semester 1</span>
                               <span className={currentTheme.text}>{calculateSemesterGPA(results, '1')}</span>
                             </div>
-                            <div className={`w-full ${currentTheme.cardBg} rounded-full h-2 backdrop-blur-xl`}>
+                            <div className={`w-full ${currentTheme.cardBg} rounded-full h-1.5 sm:h-2 backdrop-blur-xl`}>
                               <div 
-                                className={`bg-gradient-to-r ${currentTheme.progressBar1} h-2 rounded-full shadow-lg`}
+                                className={`bg-gradient-to-r ${currentTheme.progressBar1} h-1.5 sm:h-2 rounded-full shadow-lg`}
                                 style={{ width: `${(calculateSemesterGPA(results, '1') / 10) * 100}%` }}
                               ></div>
                             </div>
                           </div>
 
                           <div>
-                            <div className="flex justify-between text-sm mb-2">
+                            <div className="flex justify-between text-xs sm:text-sm mb-1 sm:mb-2">
                               <span className={`${currentTheme.text}/80 font-light`}>Semester 2</span>
                               <span className={currentTheme.text}>{calculateSemesterGPA(results, '2')}</span>
                             </div>
-                            <div className={`w-full ${currentTheme.cardBg} rounded-full h-2 backdrop-blur-xl`}>
+                            <div className={`w-full ${currentTheme.cardBg} rounded-full h-1.5 sm:h-2 backdrop-blur-xl`}>
                               <div 
-                                className={`bg-gradient-to-r ${currentTheme.progressBar2} h-2 rounded-full shadow-lg`}
+                                className={`bg-gradient-to-r ${currentTheme.progressBar2} h-1.5 sm:h-2 rounded-full shadow-lg`}
                                 style={{ width: `${(calculateSemesterGPA(results, '2') / 10) * 100}%` }}
                               ></div>
                             </div>
@@ -250,36 +250,36 @@ export function UserDashboard() {
                   </div>
                 </div>
 
-                <div className="space-y-10">
+                <div className="space-y-6 sm:space-y-10">
                   <div>
-                    <h3 className={`text-3xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>Semester 1 Subjects</h3>
-                    <div className="flex overflow-x-auto space-x-6 pb-4 h-fit relative auto-scroll scrollbar-hide">
+                    <h3 className={`text-xl sm:text-3xl font-bold mb-4 sm:mb-8 text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>Semester 1 Subjects</h3>
+                    <div className="flex overflow-x-auto space-x-4 sm:space-x-6 pb-4 h-fit relative auto-scroll scrollbar-hide">
                       {results.filter(result => result[7] === '1').map((result, index) => (
                         <div
                           key={index}
-                          className={`${currentTheme.cardBg} p-8 rounded-3xl border ${currentTheme.border} min-w-[350px] shadow-xl transition-all duration-300 relative overflow-hidden group`}
+                          className={`${currentTheme.cardBg} p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border ${currentTheme.border} min-w-[200px] sm:min-w-[250px] md:min-w-[350px] shadow-xl transition-all duration-300 relative overflow-hidden group`}
                         >
                           <div className={`absolute inset-0 bg-gradient-to-br ${currentTheme.gradientOverlay} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
                           <div className="flex items-center justify-between">
                             <div>
-                              <h4 className={`text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>{result[2]}</h4>
-                              <p className={`${currentTheme.text}/60 mt-1 font-light`}>Semester {result[7]}</p>
+                              <h4 className={`text-base sm:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>{result[2]}</h4>
+                              <p className={`${currentTheme.text}/60 mt-1 text-xs sm:text-base font-light`}>Semester {result[7]}</p>
                             </div>
                             <div className="text-right">
-                              <p className={`text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>
+                              <p className={`text-2xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>
                                 {result[6]}
                               </p>
-                              <p className={`text-sm ${currentTheme.text}/60 mt-1 font-light`}>Total Marks</p>
+                              <p className={`text-xs sm:text-sm ${currentTheme.text}/60 mt-1 font-light`}>Total Marks</p>
                             </div>
                           </div>
-                          <div className="mt-8 grid grid-cols-2 gap-6">
-                            <div className={`${darkMode ? 'bg-black/0' : 'bg-black/10'} p-4 rounded-2xl backdrop-blur-xl`}>
-                              <p className={`text-sm ${currentTheme.text}/60 font-light`}>Internal</p>
-                              <p className={`text-2xl font-bold mt-1 ${darkMode ? 'text-green-400' : 'text-blue-500'}`}>{result[4]}</p>
+                          <div className="mt-6 sm:mt-8 grid grid-cols-2 gap-4 sm:gap-6">
+                            <div className={`${darkMode ? 'bg-black/0' : 'bg-black/10'} p-3 sm:p-4 rounded-xl sm:rounded-2xl backdrop-blur-xl`}>
+                              <p className={`text-xs sm:text-sm ${currentTheme.text}/60 font-light`}>Internal</p>
+                              <p className={`text-lg sm:text-2xl font-bold mt-1 ${darkMode ? 'text-green-400' : 'text-blue-500'}`}>{result[4]}</p>
                             </div>
-                            <div className={`${darkMode ? 'bg-black/0' : 'bg-black/10'} p-4 rounded-2xl backdrop-blur-xl`}>
-                              <p className={`text-sm ${currentTheme.text}/60 font-light`}>External</p>
-                              <p className={`text-2xl font-bold mt-1 ${darkMode ? 'text-blue-400' : 'text-purple-500'}`}>{result[5]}</p>
+                            <div className={`${darkMode ? 'bg-black/0' : 'bg-black/10'} p-3 sm:p-4 rounded-xl sm:rounded-2xl backdrop-blur-xl`}>
+                              <p className={`text-xs sm:text-sm ${currentTheme.text}/60 font-light`}>External</p>
+                              <p className={`text-lg sm:text-2xl font-bold mt-1 ${darkMode ? 'text-blue-400' : 'text-purple-500'}`}>{result[5]}</p>
                             </div>
                           </div>
                         </div>
@@ -288,34 +288,34 @@ export function UserDashboard() {
                   </div>
 
                   <div>
-                    <h3 className={`text-3xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>Semester 2 Subjects</h3>
-                    <div className="flex overflow-x-auto space-x-6 pb-4 auto-scroll scrollbar-hide">
+                    <h3 className={`text-xl sm:text-3xl font-bold mb-4 sm:mb-8 text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>Semester 2 Subjects</h3>
+                    <div className="flex overflow-x-auto space-x-4 sm:space-x-6 pb-4 auto-scroll scrollbar-hide">
                       {results.filter(result => result[7] === '2').map((result, index) => (
                         <div
                           key={index}
-                          className={`${currentTheme.cardBg} p-8 rounded-3xl border ${currentTheme.border} min-w-[350px] shadow-xl  transition-all duration-300 relative overflow-hidden group`}
+                          className={`${currentTheme.cardBg} p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border ${currentTheme.border} min-w-[200px] sm:min-w-[250px] md:min-w-[350px] shadow-xl transition-all duration-300 relative overflow-hidden group`}
                         >
                           <div className={`absolute inset-0 bg-gradient-to-br ${currentTheme.gradientOverlay} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
                           <div className="flex items-center justify-between">
                             <div>
-                              <h4 className={`text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>{result[2]}</h4>
-                              <p className={`${currentTheme.text}/60 mt-1 font-light`}>Semester {result[7]}</p>
+                              <h4 className={`text-base sm:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>{result[2]}</h4>
+                              <p className={`${currentTheme.text}/60 mt-1 text-xs sm:text-base font-light`}>Semester {result[7]}</p>
                             </div>
                             <div className="text-right">
-                              <p className={`text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>
+                              <p className={`text-2xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>
                                 {result[6]}
                               </p>
-                              <p className={`text-sm ${currentTheme.text}/60 mt-1 font-light`}>Total Marks</p>
+                              <p className={`text-xs sm:text-sm ${currentTheme.text}/60 mt-1 font-light`}>Total Marks</p>
                             </div>
                           </div>
-                          <div className="mt-8 grid grid-cols-2 gap-6">
-                            <div className={`${darkMode ? 'bg-black/0' : 'bg-black/10'} p-4 rounded-2xl backdrop-blur-xl`}>
-                              <p className={`text-sm ${currentTheme.text}/60 font-light`}>Internal</p>
-                              <p className={`text-2xl font-bold mt-1 ${darkMode ? 'text-green-400' : 'text-blue-500'}`}>{result[4]}</p>
+                          <div className="mt-6 sm:mt-8 grid grid-cols-2 gap-4 sm:gap-6">
+                            <div className={`${darkMode ? 'bg-black/0' : 'bg-black/10'} p-3 sm:p-4 rounded-xl sm:rounded-2xl backdrop-blur-xl`}>
+                              <p className={`text-xs sm:text-sm ${currentTheme.text}/60 font-light`}>Internal</p>
+                              <p className={`text-lg sm:text-2xl font-bold mt-1 ${darkMode ? 'text-green-400' : 'text-blue-500'}`}>{result[4]}</p>
                             </div>
-                            <div className={`${darkMode ? 'bg-black/0' : 'bg-black/10'} p-4 rounded-2xl backdrop-blur-xl`}>
-                              <p className={`text-sm ${currentTheme.text}/60 font-light`}>External</p>
-                              <p className={`text-2xl font-bold mt-1 ${darkMode ? 'text-blue-400' : 'text-purple-500'}`}>{result[5]}</p>
+                            <div className={`${darkMode ? 'bg-black/0' : 'bg-black/10'} p-3 sm:p-4 rounded-xl sm:rounded-2xl backdrop-blur-xl`}>
+                              <p className={`text-xs sm:text-sm ${currentTheme.text}/60 font-light`}>External</p>
+                              <p className={`text-lg sm:text-2xl font-bold mt-1 ${darkMode ? 'text-blue-400' : 'text-purple-500'}`}>{result[5]}</p>
                             </div>
                           </div>
                         </div>
@@ -326,7 +326,7 @@ export function UserDashboard() {
               </div>
             ) : (
               <p 
-                className={`text-center ${currentTheme.text}/80 text-lg font-light`}
+                className={`text-center ${currentTheme.text}/80 text-sm sm:text-lg font-light`}
               >
                 No results found for the given enrolment number.
               </p>
