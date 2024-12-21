@@ -32,7 +32,7 @@ export function DashboardLayout() {
   const location = useLocation();
   const { setUser } = useAuth();
   const [darkMode, setDarkMode] = useState<boolean>(false);
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(window.innerWidth > 768);
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(window.innerWidth > 1024);
 
   const handleSignOut = () => {
     setUser(null);
@@ -42,7 +42,7 @@ export function DashboardLayout() {
 
   useEffect(() => {
     const handleResize = () => {
-      setSidebarOpen(window.innerWidth > 768);
+      setSidebarOpen(window.innerWidth > 1024);
     };
 
     window.addEventListener('resize', handleResize);
@@ -91,7 +91,7 @@ export function DashboardLayout() {
           animate={sidebarOpen ? "show" : "hidden"}
           variants={sidebarAnimation}
           style={{ boxShadow: "0 0 20px rgba(0, 0, 0, 0.5)", borderRadius: "0px 20px 20px 0px" }}
-          className={cn("fixed inset-y-0 overflow-hidden left-0 z-50 w-64 md:relative max-[768px]:h-fit md:flex md:flex-shrink-0", sidebarOpen ? "max-[768px]:block" : "md:block")}
+          className={cn(" relative inset-y-0  overflow-hidden left-0 z-50 w-64 max-[1024px]:fixed max-[1024px]:h-fit min-[1024px]:flex min-[1024px]:flex-shrink-0", sidebarOpen ? "max-[1024px]:block" : "[1024px]:block")}
         >
           <div className={cn("flex w-64 flex-col", currentTheme.cardBg)}>
             <div className={cn("flex min-h-0 flex-1 flex-col border-r", currentTheme.border)}>
@@ -105,7 +105,7 @@ export function DashboardLayout() {
                   <Printer className={cn("h-8 w-8", currentTheme.text)} />
                   <span className="ml-2 text-2xl font-bold tracking-wider">Print Portal</span>
                 </motion.div>
-                {window.innerWidth < 768 && <button onClick={toggleSidebar} className="text-gray-600 hover:text-gray-900">
+                {window.innerWidth < 1024 && <button onClick={toggleSidebar} className="text-gray-600 hover:text-gray-900">
                   <X className="h-6 w-6" />
                 </button>}
               </div>
@@ -179,7 +179,7 @@ export function DashboardLayout() {
         </motion.div>
 
         <div className="flex flex-1 flex-col overflow-hidden">
-          <div className="md:hidden p-4 flex justify-between items-center">
+          <div className="min-[1024px]:hidden p-4 flex justify-between items-center">
             <button onClick={toggleSidebar} className="text-gray-600 hover:text-gray-900">
               <Menu className="h-6 w-6" />
             </button>

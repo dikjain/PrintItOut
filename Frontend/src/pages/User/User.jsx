@@ -137,7 +137,7 @@ export function UserDashboard() {
   return (
     <PageTransition>
       <div 
-        className={`space-y-4 sm:space-y-6 p-4 sm:p-6 ${currentTheme.background} ${currentTheme.text} rounded-3xl min-h-screen relative overflow-hidden`}
+        className={`space-y-4 sm:space-y-6 ${window.innerWidth < 460 ? "p-[10px]" : "p-4 sm:p-6"} ${currentTheme.background} ${currentTheme.text} rounded-3xl min-h-screen relative overflow-hidden`}
       >
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className={`absolute w-[500px] h-[500px] ${darkMode ? 'bg-green-500/10' : 'bg-blue-500/10'} rounded-full blur-[100px] -top-48 -left-48 mix-blend-overlay`}></div>
@@ -160,7 +160,7 @@ export function UserDashboard() {
           </div>
 
           <div 
-            className={`${currentTheme.cardBg} rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-10 border ${currentTheme.border} shadow-2xl mt-4 sm:mt-8 relative overflow-hidden group`}
+            className={`${currentTheme.cardBg} rounded-2xl sm:rounded-3xl ${window.innerWidth < 460 ? "p-[10px]" : "p-4 sm:p-6"}  md:p-10 border ${currentTheme.border} shadow-2xl mt-4 sm:mt-8 relative overflow-hidden group`}
           >
             <div className={`absolute inset-0 bg-gradient-to-br ${currentTheme.gradientOverlay}`}></div>
             {loading ? (
@@ -175,7 +175,7 @@ export function UserDashboard() {
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
                   <div 
-                    className={`${currentTheme.cardBg} p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border ${currentTheme.border} shadow-2xl hover:shadow-3xl transition-all duration-300 relative overflow-hidden group`}
+                    className={`${currentTheme.cardBg} ${window.innerWidth < 460 ? "p-[10px]" : "p-4 sm:p-6"} md:p-8 rounded-2xl sm:rounded-3xl border ${currentTheme.border} shadow-2xl hover:shadow-3xl transition-all duration-300 relative overflow-hidden group`}
                   >
                     <div className={`absolute inset-0 bg-gradient-to-br ${currentTheme.gradientOverlay} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
                     <div className="flex items-center space-x-4 sm:space-x-6">
@@ -200,7 +200,7 @@ export function UserDashboard() {
                   </div>
 
                   <div 
-                    className={`${currentTheme.cardBg} p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border ${currentTheme.border} shadow-2xl hover:shadow-3xl transition-all duration-300 relative overflow-hidden group`}
+                    className={`${currentTheme.cardBg} ${window.innerWidth < 460 ? "p-[10px]" : "p-4 sm:p-6"}  md:p-8 rounded-2xl sm:rounded-3xl border ${currentTheme.border} shadow-2xl hover:shadow-3xl transition-all duration-300 relative overflow-hidden group`}
                   >
                     <div className={`absolute inset-0 bg-gradient-to-br ${currentTheme.gradientOverlay} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
                     <div className="flex flex-col space-y-4 sm:space-y-6">
@@ -257,7 +257,7 @@ export function UserDashboard() {
                       {results.filter(result => result[7] === '1').map((result, index) => (
                         <div
                           key={index}
-                          className={`${currentTheme.cardBg} p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border ${currentTheme.border} min-w-[200px] sm:min-w-[250px] md:min-w-[350px] shadow-xl transition-all duration-300 relative overflow-hidden group`}
+                          className={`${currentTheme.cardBg} ${window.innerWidth < 460 ? "p-[10px]" : "p-4 sm:p-6"}  md:p-8 rounded-2xl sm:rounded-3xl border ${currentTheme.border} min-w-[200px] sm:min-w-[250px] md:min-w-[350px] shadow-xl transition-all duration-300 relative overflow-hidden group`}
                         >
                           <div className={`absolute inset-0 bg-gradient-to-br ${currentTheme.gradientOverlay} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
                           <div className="flex items-center justify-between">
@@ -293,7 +293,7 @@ export function UserDashboard() {
                       {results.filter(result => result[7] === '2').map((result, index) => (
                         <div
                           key={index}
-                          className={`${currentTheme.cardBg} p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border ${currentTheme.border} min-w-[200px] sm:min-w-[250px] md:min-w-[350px] shadow-xl transition-all duration-300 relative overflow-hidden group`}
+                          className={`${currentTheme.cardBg} ${window.innerWidth < 460 ? "p-[10px]" : "p-4 sm:p-6"}  md:p-8 rounded-2xl sm:rounded-3xl border ${currentTheme.border} min-w-[200px] sm:min-w-[250px] md:min-w-[350px] shadow-xl transition-all duration-300 relative overflow-hidden group`}
                         >
                           <div className={`absolute inset-0 bg-gradient-to-br ${currentTheme.gradientOverlay} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
                           <div className="flex items-center justify-between">
