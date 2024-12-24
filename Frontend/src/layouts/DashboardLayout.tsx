@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import  { useEffect, useState, useMemo } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Printer, Home, FileText, History, LogOut, Moon, Sun, Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -31,8 +31,9 @@ export function DashboardLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const { setUser } = useAuth();
-  const [darkMode, setDarkMode] = useState<boolean>(false);
+  const [darkMode, setDarkMode] = useState<boolean>(localStorage.getItem('themeMode') === 'dark');
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(window.innerWidth > 1024);
+  const [showThemeModal, setShowThemeModal] = useState<boolean>(!localStorage.getItem('themeMode'));
 
   const handleSignOut = () => {
     setUser(null);
@@ -54,6 +55,7 @@ export function DashboardLayout() {
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
+    localStorage.setItem('themeMode', !darkMode ? 'dark' : 'light');
   };
 
   const toggleSidebar = () => {
@@ -83,8 +85,44 @@ export function DashboardLayout() {
 
   const currentTheme = useMemo(() => darkMode ? themes.dark : themes.light, [darkMode, themes]);
 
+  const handleThemeSelection = (mode: 'dark' | 'light') => {
+    setDarkMode(mode === 'dark');
+    localStorage.setItem('themeMode', mode);
+    setShowThemeModal(false);
+  };
+
   return (
     <div className={cn("min-h-screen transition-colors duration-500", currentTheme.background, currentTheme.text)}>
+      {showThemeModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
+          <div className={`${currentTheme.cardBg} p-8 rounded-3xl border ${currentTheme.border} shadow-2xl relative overflow-hidden group w-[90%] max-w-md`}>
+            <div className={`absolute inset-0 bg-gradient-to-br ${currentTheme.gradientOverlay} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
+            <div className="relative z-10">
+              <h2 className={`text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient} tracking-tight mb-8`}>
+                Choose Your Theme
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <button
+                  onClick={() => handleThemeSelection('light')}
+                  className={`group relative px-6 py-4 rounded-2xl border ${currentTheme.border} bg-gradient-to-br from-blue-100 via-white to-purple-100 hover:shadow-xl transition-all duration-300`}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+                  <Sun className="w-8 h-8 mx-auto mb-2 text-blue-500" />
+                  <span className="block text-gray-800 font-medium">Light Mode</span>
+                </button>
+                <button
+                  onClick={() => handleThemeSelection('dark')}
+                  className={`group relative px-6 py-4 rounded-2xl border ${currentTheme.border} bg-gradient-to-br from-green-900 via-black to-blue-900 hover:shadow-xl transition-all duration-300`}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 via-transparent to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+                  <Moon className="w-8 h-8 mx-auto mb-2 text-green-400" />
+                  <span className="block text-white font-medium">Dark Mode</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="flex h-screen">
         <motion.div
           initial="show"

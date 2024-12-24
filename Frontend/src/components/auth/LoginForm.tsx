@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -6,7 +6,10 @@ import axios from 'axios';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { useAuth } from '../../context.js';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { FiMail, FiLock } from 'react-icons/fi';
+import { FaSpinner } from 'react-icons/fa';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -19,6 +22,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 export function LoginForm() {
   const { setUser, user } = useAuth();
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
   const {
     register,
     handleSubmit,
@@ -53,47 +57,100 @@ export function LoginForm() {
         }
         navigate('/dashboard');
       } else {
+        setErrorMessage('Error logging in. Please try again.');
         console.error('Error logging in:', response.data);
       }
     } catch (error) {
+      setErrorMessage('Error logging in. Please check your credentials and try again.');
       console.error('Error logging in:', error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div>
+    <motion.form 
+      onSubmit={handleSubmit(onSubmit)} 
+      className="w-full space-y-4 p-6 bg-white/[0.7] backdrop-blur-xl rounded-3xl border border-gray-200 shadow-2xl"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      {errorMessage && (
+        <motion.p 
+          className="text-red-500 bg-red-100 p-3 rounded-lg"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+        >
+          {errorMessage}
+        </motion.p>
+      )}
+
+      <motion.div whileHover={{ scale: 1.02 }} className="relative">
+        <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-500" />
         <Input
           type="email"
           placeholder="Email"
           {...register('email')}
           error={errors.email?.message}
+          className="pl-10 bg-white/50 border-blue-100 focus:border-blue-500 transition-all"
         />
-      </div>
-      <div>
+      </motion.div>
+
+      <motion.div whileHover={{ scale: 1.02 }} className="relative">
+        <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-500" />
         <Input
           type="password"
           placeholder="Password"
           {...register('password')}
           error={errors.password?.message}
+          className="pl-10 bg-white/50 border-blue-100 focus:border-blue-500 transition-all"
         />
-      </div>
-      <div className="flex items-center justify-between">
-        <label className="flex items-center space-x-2">
-          <input
+      </motion.div>
+
+      <motion.div 
+        className="flex items-center justify-between"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
+        <label className="flex items-center space-x-2 group">
+          <motion.input
             type="checkbox"
             {...register('rememberMe')}
-            className="rounded border-gray-300"
+            className="rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+            whileTap={{ scale: 0.9 }}
           />
-          <span className="text-sm text-gray-600">Remember me</span>
+          <span className="text-sm text-gray-600 group-hover:text-blue-500 transition-colors">Remember me</span>
         </label>
-        <a href="/forgot-password" className="text-sm text-blue-600 hover:underline">
-          Forgot password?
-        </a>
-      </div>
-      <Button type="submit" className="w-full" disabled={isSubmitting}>
-        {isSubmitting ? 'Signing in...' : 'Sign in'}
-      </Button>
-    </form>
+        <motion.div
+          className="text-sm text-blue-600 hover:text-blue-700 transition-colors"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Link to="/forgot-password">
+            Forgot password?
+          </Link>
+        </motion.div>
+      </motion.div>
+
+      <motion.div
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+      >
+        <Button 
+          type="submit" 
+          className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-semibold py-2 px-4 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? (
+            <>
+              <FaSpinner className="animate-spin" />
+              <span>Signing in...</span>
+            </>
+          ) : (
+            <span>Sign in</span>
+          )}
+        </Button>
+      </motion.div>
+    </motion.form>
   );
 }

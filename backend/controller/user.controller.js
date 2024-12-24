@@ -77,4 +77,13 @@ const addPrint = async (req, res) => {
     res.status(201).send("Print added successfully");
 };
 
-export { registeruser, authUser, getAllUsers, addPrint }
+const resetPassword = async (req, res) => {
+    const { email, newPassword } = req.body;
+    const user = await Users.findOne({ email });
+    user.password = newPassword;
+    await user.save();
+    res.status(201).send("Password reset successfully");
+};
+
+
+export { registeruser, authUser, getAllUsers, addPrint, resetPassword }

@@ -1,12 +1,13 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthLayout } from '@/layouts/AuthLayout';
+import { AuthLayout } from './layouts/AuthLayout';
 import { DashboardLayout } from './layouts/DashboardLayout';
-import { LoginPage } from '@/pages/auth/LoginPage';
+import { LoginPage } from './pages/auth/LoginPage';
 import { SignupPage } from './pages/auth/SignupPage';
-import { StudentDashboard } from '@/pages/student/Dashboard';
-import { AdminDashboard } from '@/pages/admin/Dashboard';
+import { StudentDashboard } from './pages/student/Dashboard';
+import { AdminDashboard } from './pages/admin/Dashboard';
 import { AnimatePresence } from 'framer-motion';
 import { UserDashboard } from './pages/User/User';
+import { ForgotPasswordPage } from './pages/auth/ForgotPasswordForm';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route element={<AuthLayout />}>
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/signup" element={<SignupPage />} />
           </Route>
           <Route path="/dashboard" element={<DashboardLayout />}>
