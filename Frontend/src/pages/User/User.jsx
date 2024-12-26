@@ -62,7 +62,8 @@ export function UserDashboard() {
       const subjectsResponse = await axios.get('https://raw.githubusercontent.com/dikjain/PrintItOut/refs/heads/main/Frontend/Public/Assets/subjects.csv');
       const subjectsCsvText = subjectsResponse.data;
       const parsedSubjectsData = Papa.parse(subjectsCsvText, { header: false });
-      const subjectMap = new Map(parsedSubjectsData.data.map((row) => [row[0], row[2]]));
+      const subjectMap = new Map(parsedSubjectsData.data.map((row) => [row[0], row[3]]));
+      
 
       const resultsWithPaperNames = filteredResults.map((row) => {
         const subCode = row[2];
@@ -124,18 +125,29 @@ export function UserDashboard() {
     return null;
   }
 
+  const GetGrade = useCallback((marks) => {
+    if (marks >= 90) return 10;
+    if (marks >= 75) return 9;
+    if (marks >= 65) return 8;
+    if (marks >= 55) return 7;
+    if (marks >= 50) return 6;
+    if (marks >= 45) return 5;
+    if (marks >= 40) return 4;
+    if (marks < 40) return 0;
+  }, []);
+
+
   const calculateCGPA = useCallback((results) => {
-    const totalMarks = results.reduce((acc, result) => acc + parseFloat(result[6]), 0);
-    const totalSubjects = results.length;
-    return (totalMarks / totalSubjects / 10).toFixed(2);
+    const totalGradePoints = results.reduce((acc, result) => acc + (GetGrade(parseFloat(result[6])) * parseFloat(result[2])), 0);
+    const totalCredits = results.reduce((acc, result) => acc + parseFloat(result[2]), 0);
+    return (totalGradePoints / totalCredits).toFixed(2);
   }, []);
 
   const calculateSemesterGPA = useCallback((results, semester) => {
     const semesterResults = results.filter(result => result[7] === semester);
-    const totalMarks = semesterResults.reduce((acc, result) => acc + parseFloat(result[6]), 0);
-    const totalSubjects = semesterResults.length;
-    return (totalMarks / totalSubjects / 10).toFixed(2);
-  }, []);
+    const totalGradePoints = semesterResults.reduce((acc, result) => acc + (GetGrade(parseFloat(result[6])) * parseFloat(result[2])), 0);
+    return (totalGradePoints / 25).toFixed(2);
+  }, [GetGrade]);
 
   const semesterData = useMemo(() => {
     const sem1Results = results.filter(result => result[7] === '1');
@@ -165,6 +177,9 @@ export function UserDashboard() {
       }
     };
   }, [results, darkMode]);
+
+
+
 
   return (
     <PageTransition>
