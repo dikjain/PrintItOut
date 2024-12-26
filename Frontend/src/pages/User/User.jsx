@@ -62,8 +62,18 @@ export function UserDashboard() {
       const subjectsResponse = await axios.get('https://raw.githubusercontent.com/dikjain/PrintItOut/refs/heads/main/Frontend/Public/Assets/subjects.csv');
       const subjectsCsvText = subjectsResponse.data;
       const parsedSubjectsData = Papa.parse(subjectsCsvText, { header: false });
-      const subjectMap = new Map(parsedSubjectsData.data.map((row) => [row[0], row[3]]));
+      const subjectMap = new Map(parsedSubjectsData.data.map((row) => [row[0], row[2]]));
+      parsedSubjectsData.data.forEach((row) => {
+        const subCode = row[0];
+        const credits = row[3];
+        filteredResults.forEach((result) => {
+          if (result[2] === subCode) {
+            result[10] = credits;
+          }
+        });
+      });
       
+
 
       const resultsWithPaperNames = filteredResults.map((row) => {
         const subCode = row[2];
@@ -125,6 +135,9 @@ export function UserDashboard() {
     return null;
   }
 
+
+
+  
   const GetGrade = useCallback((marks) => {
     if (marks >= 90) return 10;
     if (marks >= 75) return 9;
@@ -135,19 +148,19 @@ export function UserDashboard() {
     if (marks >= 40) return 4;
     if (marks < 40) return 0;
   }, []);
-
+  
 
   const calculateCGPA = useCallback((results) => {
-    const totalGradePoints = results.reduce((acc, result) => acc + (GetGrade(parseFloat(result[6])) * parseFloat(result[2])), 0);
-    const totalCredits = results.reduce((acc, result) => acc + parseFloat(result[2]), 0);
+    const totalGradePoints = results.reduce((acc, result) => acc + GetGrade(parseFloat(result[6])) * parseFloat(result[10]), 0);
+    const totalCredits = results.reduce((acc, result) => acc + parseFloat(result[10]), 0);
     return (totalGradePoints / totalCredits).toFixed(2);
   }, []);
 
   const calculateSemesterGPA = useCallback((results, semester) => {
     const semesterResults = results.filter(result => result[7] === semester);
-    const totalGradePoints = semesterResults.reduce((acc, result) => acc + (GetGrade(parseFloat(result[6])) * parseFloat(result[2])), 0);
-    return (totalGradePoints / 25).toFixed(2);
-  }, [GetGrade]);
+    const totalWeightedMarks = semesterResults.reduce((acc, result) => acc + (GetGrade(parseFloat(result[6])) * parseFloat(result[10])), 0);
+    return (totalWeightedMarks / 25).toFixed(2);
+  }, []);
 
   const semesterData = useMemo(() => {
     const sem1Results = results.filter(result => result[7] === '1');
