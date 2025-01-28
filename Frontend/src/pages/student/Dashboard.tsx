@@ -63,7 +63,7 @@ export function StudentDashboard() {
   const userName = "AryanChauhan";
 
   const generateQRCode = async (pages: number) => {
-    const amount = pages * 1.91;
+    const amount = pages * 2;
     const upiUrl = `upi://pay?pa=${upiId}&pn=${userName}&am=${amount}&cu=INR`;
     setUpiUrl(upiUrl);
 
@@ -245,7 +245,7 @@ export function StudentDashboard() {
         <div className={cn("p-8 rounded-lg shadow-lg w-96", currentTheme.cardBg, currentTheme.text)}>
           <h2 className="text-xl font-semibold mb-4">Payment Required</h2>
           <p className="text-red-500 mb-2 text-[12px]">Note: if you don't pay the amount, we won't print your assignment ( every payment is checked )</p>
-          <p className="mb-4">Amount to pay: ₹{selectedAssignment ? selectedAssignment.pages * 1.91 : 0}</p>
+          <p className="mb-4">Amount to pay: ₹{selectedAssignment ? selectedAssignment.pages * 2 : 0}</p>
           {qrCodeUrl && (
             <div className="flex flex-col items-center">
               <div className="flex items-center gap-4 mb-2">
