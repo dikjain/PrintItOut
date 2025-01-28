@@ -31,3 +31,8 @@
   box-shadow: 0 0 20px 0 darkblue;
   background-color: darkblue;
 }
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}

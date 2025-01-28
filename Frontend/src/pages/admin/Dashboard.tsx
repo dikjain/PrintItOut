@@ -673,7 +673,7 @@ export function AdminDashboard() {
                         <FileText className="h-5 w-5 text-gray-400" />
                       </div>
                       <div className="ml-4">
-                        <p className="text-sm font-medium">{assignment.title}</p>
+                        <p className="text-sm font-medium text-gray-800">{assignment.title}</p>
                         <p className="text-sm text-gray-500">{assignment.pages} pages</p>
                         <p className="text-sm text-gray-500">{assignment.user.username} (Roll No: {assignment.user.rollnumber})</p>
                       </div>

@@ -10,6 +10,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiMail, FiLock } from 'react-icons/fi';
 import { FaSpinner } from 'react-icons/fa';
+import { toast } from "sonner";
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -50,19 +51,37 @@ export function LoginForm() {
         email: data.email,
         password: data.password,
       });
-      if (response.status === 200) {
-        setUser(response.data);
+      
+      const userData = response.data;
+      if (userData) {
+        setUser(userData);
         if (data.rememberMe) {
-          localStorage.setItem('user', JSON.stringify(response.data));
+          localStorage.setItem('user', JSON.stringify(userData));
         }
+        toast.success("Successfully logged in!");
         navigate('/dashboard');
       } else {
-        setErrorMessage('Error logging in. Please try again.');
-        console.error('Error logging in:', response.data);
+        const errorMsg = 'Invalid credentials. Please check your email and password.';
+        toast.error(errorMsg);
+        setErrorMessage(errorMsg);
+        console.error('Login failed:', errorMsg);
       }
-    } catch (error) {
-      setErrorMessage('Error logging in. Please check your credentials and try again.');
-      console.error('Error logging in:', error);
+    } catch (error: any) {
+      let errorMsg;
+      if (error.response?.status === 401) {
+        errorMsg = 'Invalid email or password';
+      } else if (error.response?.status === 404) {
+        errorMsg = 'Account not found. Please check your email';
+      } else if (error.response?.status === 403) {
+        errorMsg = 'Your account has been locked. Please contact support';
+      } else if (!navigator.onLine) {
+        errorMsg = 'No internet connection. Please check your network';
+      } else {
+        errorMsg = 'Unable to connect to server. Please try again later';
+      }
+      toast.error(errorMsg);
+      setErrorMessage(errorMsg);
+      console.error('Login error:', error);
     }
   };
 

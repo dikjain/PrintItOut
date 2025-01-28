@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaSpinner } from 'react-icons/fa';
 import { FiUser, FiMail, FiPhone, FiLock, FiKey, FiHash } from 'react-icons/fi';
 import { motion } from 'framer-motion';
+import { toast } from "sonner";
 
 const signupSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -31,7 +32,6 @@ export function SignupForm() {
   const { setUser, user } = useAuth();
   const [otpSent, setOtpSent] = useState(false);
   const [serverOtp, setServerOtp] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
   const {
     register,
     handleSubmit,
@@ -58,19 +58,29 @@ export function SignupForm() {
       setOtpSent(true);
       const response = await axios.post('/api/otp/send-otp', { email });
       setServerOtp(response.data.otp);
+      toast.success('OTP sent successfully to your email');
       console.log('OTP sent successfully:', response.data.otp);
       setOtpSent(false);
-    } catch (error) {
+    } catch (error: any) {
+      let errorMsg;
+      if (error.response?.status === 429) {
+        errorMsg = 'Too many OTP requests. Please try again later';
+      } else if (error.response?.status === 400) {
+        errorMsg = 'Invalid email address';
+      } else if (!navigator.onLine) {
+        errorMsg = 'No internet connection. Please check your network';
+      } else {
+        errorMsg = 'Failed to send OTP. Please try again';
+      }
+      toast.error(errorMsg);
       console.error('Error sending OTP:', error);
-      setErrorMessage('Failed to send OTP. Please try again.');
       setOtpSent(false);
     }
   };
 
   const onSubmit = async (data: SignupFormData) => {
     if (data.otp !== serverOtp) {
-      console.error('Invalid OTP');
-      setErrorMessage('Invalid OTP. Please check and try again.');
+      toast.error('Invalid OTP. Please check and try again');
       return;
     }
     try {
@@ -86,12 +96,23 @@ export function SignupForm() {
       localStorage.setItem('user', JSON.stringify(response.data));
       setOtpSent(false);
       setServerOtp('');
+      toast.success('Account created successfully!');
       navigate('/dashboard');
-    } catch (error) {
+    } catch (error: any) {
+      let errorMsg;
+      if (error.response?.status === 502) {
+        errorMsg = 'Email or roll number already exists';
+      } else if (error.response?.status === 400) {
+        errorMsg = 'Invalid registration data';
+      } else if (!navigator.onLine) {
+        errorMsg = 'No internet connection. Please check your network';
+      } else {
+        errorMsg = 'Registration failed. Please try again later';
+      }
+      toast.error(errorMsg);
       console.error('Error registering user:', error);
       setOtpSent(false);
       setServerOtp('');
-      setErrorMessage('Registration failed. Please try again.');
     }
   };
 
@@ -103,16 +124,6 @@ export function SignupForm() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      {errorMessage && (
-        <motion.p 
-          className="text-red-500 bg-red-100 p-3 rounded-lg"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-        >
-          {errorMessage}
-        </motion.p>
-      )}
-      
       <motion.div whileHover={{ scale: 1.02 }} className="relative">
         <FiUser className={`absolute left-3 top-1/2 -translate-y-1/2 ${errors.name ? 'text-red-500' : 'text-blue-500'}`} />
         <Input
@@ -121,15 +132,6 @@ export function SignupForm() {
           error={errors.name?.message}
           className={`pl-10 bg-white/50 border-blue-100 focus:border-blue-500 transition-all ${errors.name ? 'border-red-500' : ''}`}
         />
-        {errors.name && (
-          <motion.p 
-            className="text-red-500 bg-red-100 p-3 rounded-lg"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-          >
-            {errors.name.message}
-          </motion.p>
-        )}
       </motion.div>
 
       <motion.div whileHover={{ scale: 1.02 }} className="relative">
@@ -141,15 +143,6 @@ export function SignupForm() {
           error={errors.email?.message}
           className={`pl-10 bg-white/50 border-blue-100 focus:border-blue-500 transition-all ${errors.email ? 'border-red-500' : ''}`}
         />
-        {errors.email && (
-          <motion.p 
-            className="text-red-500 bg-red-100 p-3 rounded-lg"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-          >
-            {errors.email.message}
-          </motion.p>
-        )}
       </motion.div>
 
       <motion.div whileHover={{ scale: 1.02 }} className="relative">
@@ -159,15 +152,6 @@ export function SignupForm() {
           {...register('rollnumber')}
           className={`pl-10 bg-white/50 border-blue-100 focus:border-blue-500 transition-all ${errors.rollnumber ? 'border-red-500' : ''}`}
         />
-        {errors.rollnumber && (
-          <motion.p 
-            className="text-red-500 bg-red-100 p-3 rounded-lg"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-          >
-            {errors.rollnumber.message}
-          </motion.p>
-        )}
       </motion.div>
 
       <motion.div whileHover={{ scale: 1.02 }} className="relative">
@@ -178,15 +162,6 @@ export function SignupForm() {
           error={errors.phone?.message}
           className={`pl-10 bg-white/50 border-blue-100 focus:border-blue-500 transition-all ${errors.phone ? 'border-red-500' : ''}`}
         />
-        {errors.phone && (
-          <motion.p 
-            className="text-red-500 bg-red-100 p-3 rounded-lg"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-          >
-            {errors.phone.message}
-          </motion.p>
-        )}
       </motion.div>
 
       <motion.div whileHover={{ scale: 1.02 }} className="relative">
@@ -198,15 +173,6 @@ export function SignupForm() {
           error={errors.password?.message}
           className={`pl-10 bg-white/50 border-blue-100 focus:border-blue-500 transition-all ${errors.password ? 'border-red-500' : ''}`}
         />
-        {errors.password && (
-          <motion.p 
-            className="text-red-500 bg-red-100 p-3 rounded-lg"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-          >
-            {errors.password.message}
-          </motion.p>
-        )}
       </motion.div>
 
       <motion.div whileHover={{ scale: 1.02 }} className="relative">
@@ -218,15 +184,6 @@ export function SignupForm() {
           error={errors.confirmPassword?.message}
           className={`pl-10 bg-white/50 border-blue-100 focus:border-blue-500 transition-all ${errors.confirmPassword ? 'border-red-500' : ''}`}
         />
-        {errors.confirmPassword && (
-          <motion.p 
-            className="text-red-500 bg-red-100 p-3 rounded-lg"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-          >
-            {errors.confirmPassword.message}
-          </motion.p>
-        )}
       </motion.div>
 
       <motion.div className="flex items-center w-full justify-between gap-4">
@@ -238,15 +195,6 @@ export function SignupForm() {
             error={errors.otp?.message}
             className={`pl-10 bg-white/50 border-blue-100 focus:border-blue-500 transition-all ${errors.otp ? 'border-red-500' : ''}`}
           />
-          {errors.otp && (
-            <motion.p 
-              className="text-red-500 bg-red-100 p-3 rounded-lg"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-            >
-              {errors.otp.message}
-            </motion.p>
-          )}
         </div>
         <motion.div
           whileHover={{ scale: 1.05 }}

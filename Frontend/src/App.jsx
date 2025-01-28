@@ -8,6 +8,7 @@ import { AdminDashboard } from './pages/admin/Dashboard';
 import { AnimatePresence } from 'framer-motion';
 import { UserDashboard } from './pages/User/User';
 import { ForgotPasswordPage } from './pages/auth/ForgotPasswordForm';
+import { Toaster } from "./components/ui/sonner";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </AnimatePresence>
+      <Toaster />
     </Router>
   );
 }
