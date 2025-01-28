@@ -139,7 +139,7 @@ export function AdminDashboard() {
   const handlePagesChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const pagesValue = parseInt(e.target.value, 10);
     setPages(pagesValue);
-    setAmount(pagesValue * 3);
+    setAmount(pagesValue * 1.91);
   }, []);
 
   const handleAddAssignmentSubmit = useCallback(async () => {
