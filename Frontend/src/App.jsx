@@ -9,7 +9,8 @@ import { AnimatePresence } from 'framer-motion';
 import { UserDashboard } from './pages/User/User';
 import { ForgotPasswordPage } from './pages/auth/ForgotPasswordForm';
 import { Toaster } from "./components/ui/sonner";
-
+import { FilePrint } from './pages/student/FilePrint';
+import { CustomPrint } from './pages/admin/CustomPrint';
 function App() {
   return (
     <Router>
@@ -25,9 +26,11 @@ function App() {
             <Route index element={<UserDashboard />} />
             <Route path="assignments" element={<StudentDashboard />} />
             <Route path="history" element={<StudentDashboard />} />
+            <Route path="print" element={<FilePrint />} />
           </Route>
           <Route path="/admin" element={<DashboardLayout />}>
             <Route index element={<AdminDashboard />} />
+            <Route path="customprint" element={<CustomPrint />} />
           </Route>
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>

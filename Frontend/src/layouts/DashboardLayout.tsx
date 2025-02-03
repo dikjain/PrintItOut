@@ -1,6 +1,6 @@
 import  { useEffect, useState, useMemo } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Printer, Home, FileText, History, LogOut, Moon, Sun, Menu, X } from 'lucide-react';
+import { Printer, Home, FileText, History, LogOut, Moon, Sun, Menu, X, PrinterIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { PageTransition } from '@/components/animations/PageTransition';
@@ -9,9 +9,13 @@ import { useAuth } from '@/context';
 
 const navigation = [
   { name: 'Dashboard', href: location.pathname.toLowerCase().startsWith('/admin') ? '/admin' : '/dashboard', icon: Home },
-  ...(location.pathname.toLowerCase().startsWith('/admin') ? [] : [
+  ...(location.pathname.toLowerCase().startsWith('/admin') ? [
+    { name: 'Custom Print', href: '/admin/customprint', icon: PrinterIcon },
+  ] : [
     { name: 'Assignments', href: '/dashboard/assignments', icon: FileText },
     { name: 'Print History', href: '/dashboard/history', icon: History },
+    { name: 'Print', href: '/dashboard/print', icon: PrinterIcon },
+    
   ]),
 ];
 
