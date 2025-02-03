@@ -169,6 +169,7 @@ export function FilePrint() {
 
   const handleFileSubmit = async (e) => {
     e.preventDefault();
+    console.log(user);
     if (!file || !title) {
       alert('Please fill all fields');
       return;
@@ -201,9 +202,10 @@ export function FilePrint() {
         rollnumber : user.rollnumber,
         Phone : user.phone,
         userId: user._id,
-
+        username: user.username,
         upiId: userUpiId,
         message
+
       });
       
 

@@ -34,11 +34,16 @@ const customPrintSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    username: {
+        type: String,
+        required: true
+    },
     status: {
         type: String,
         enum: ['Pending', 'Completed'],
         default: 'Pending'
     },
+
     createdAt: {
         type: Date,
         default: Date.now

@@ -2,7 +2,8 @@ import CustomPrint from "../Models/customPrint.model.js";
 
 export const createCustomPrint = async (req, res) => {
     try {
-        const { fileUrl, title, pages, userId, upiId, message, rollnumber, Phone } = req.body;
+        const { fileUrl, title, pages, userId, upiId, message, rollnumber, Phone, username } = req.body;
+
 
 
         if (!fileUrl || !title || !pages || !userId || !upiId || !rollnumber || !Phone) {
@@ -18,9 +19,8 @@ export const createCustomPrint = async (req, res) => {
             message,
             rollnumber,
             Phone,
+            username,
             status: "Pending"
-
-
         });
 
         const savedCustomPrint = await newCustomPrint.save();

@@ -8,9 +8,6 @@ import Switch from 'react-switch';
 import { cn } from '@/lib/utils';
 
 export function CustomPrint() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
   const [customPrints, setCustomPrints] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showAll, setShowAll] = useState(false);
@@ -20,6 +17,8 @@ export function CustomPrint() {
   const [isPinModalOpen, setIsPinModalOpen] = useState(true);
   const [pin, setPin] = useState('');
   const { mode: darkMode } = useOutletContext();
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const getAllUsers = useCallback(async () => {
     const response = await axios.get('/api/users/allusers');
@@ -41,38 +40,28 @@ export function CustomPrint() {
   }, []);
 
   useEffect(() => {
-    if (!user) {
-      try {
-        const localUser = localStorage.getItem('user');
-        if (localUser) {
-          setUser(JSON.parse(localUser));
-        } else {
-          navigate('/login');
+      if (!user) {
+          try {
+              const localUser = localStorage.getItem('user');
+              if (localUser) {
+                  setUser(JSON.parse(localUser));
+                } else {
+                    navigate('/login');
+                }
+            } catch (error) {
+                console.error('Error fetching user:', error);
+            }
         }
-      } catch (error) {
-        console.error('Error fetching user:', error);
-      }
-    }
-  }, [user, navigate, setUser]);
-
-  useEffect(() => {
-    fetchCustomPrints();
+    }, [user, navigate, setUser]);
+    
+    useEffect(() => {
+        fetchCustomPrints();
+        console.log(customPrints);
   }, [fetchCustomPrints]);
 
   useEffect(() => {
     getAllUsers();
   }, [getAllUsers]);
-
-  const handleModalClose = useCallback(() => {
-    setIsModalOpen(false);
-    setIsUserModalOpen(false);
-    setSelectedUser(null);
-  }, []);
-
-  const handleUserModalOpen = useCallback((user) => {
-    setSelectedUser(user);
-    setIsUserModalOpen(true);
-  }, []);
 
   const handleDeletePrint = useCallback(async (printId) => {
     try {
@@ -98,14 +87,6 @@ export function CustomPrint() {
     }
   }, [fetchCustomPrints]);
 
-  const handlePinSubmit = useCallback(() => {
-    if (pin === '1289') {
-      setIsPinModalOpen(false);
-    } else {
-      navigate('/login');
-    }
-  }, [pin, navigate]);
-
   const pendingPrintsCount = useMemo(() => 
     Array.isArray(customPrints) ? customPrints.filter(p => p.status === 'Pending').length : 0, 
     [customPrints]
@@ -119,38 +100,81 @@ export function CustomPrint() {
       : customPrints.filter(p => p.status === 'Pending').reduce((total, print) => total + print.pages, 0);
   }, [customPrints, showAll]);
 
-  if (isPinModalOpen) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 z-50">
-        <div className={cn("p-8 rounded-lg shadow-lg w-96", 
-          darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900")}>
-          <h2 className="text-xl font-semibold">Enter PIN</h2>
-          <div className="flex flex-col">
-            <label className="text-sm font-medium mb-1">PIN</label>
-            <input
-              value={pin}
-              onChange={(e) => setPin(e.target.value)}
-              className={cn("mt-1 block w-full border px-3 py-2 rounded-md shadow-sm",
-                darkMode ? "bg-gray-700 border-gray-600 text-white" : "border-gray-300 bg-white")}
-            />
-          </div>
-          <div className="pt-4">
-            <button
-              onClick={handlePinSubmit}
-              className={cn("w-full px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2",
-                darkMode ? "bg-indigo-600 hover:bg-indigo-700 text-white" : "bg-indigo-500 hover:bg-indigo-600 text-white")}
-            >
-              <CheckCircle className="h-5 w-5" />
-              <span>Submit</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const handleUserModalOpen = useCallback((user) => {
+    setSelectedUser(user);
+    setIsUserModalOpen(true);
+  }, []);
+
+  const handleModalClose = useCallback(() => {
+    setIsUserModalOpen(false);
+    setSelectedUser(null);
+  }, []);
 
   return (
     <div className={`space-y-6 relative transition-colors duration-[500ms] min-h-screen p-6 ${darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"}`}>
+      {isUserModalOpen && selectedUser && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 z-50">
+          <div className={cn("p-8 rounded-lg shadow-lg w-full max-w-md mx-4",
+            darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900")}>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-semibold">User Profile</h2>
+              <button 
+                onClick={handleModalClose}
+                className={cn("transition-colors",
+                  darkMode ? "text-gray-400 hover:text-gray-300" : "text-gray-400 hover:text-gray-500")}
+              >
+                <XCircle className="h-6 w-6" />
+              </button>
+            </div>
+
+            <div className="space-y-6">
+              <div className="flex flex-col">
+                <label className="text-sm font-medium mb-1">Full Name</label>
+                <div className={cn("px-4 py-3 rounded-lg",
+                  darkMode ? "bg-gray-700 text-white" : "bg-gray-50 text-gray-800")}>
+                  {selectedUser.username}
+                </div>
+              </div>
+
+              <div className="flex flex-col">
+                <label className="text-sm font-medium mb-1">Roll Number</label>
+                <div className={cn("px-4 py-3 rounded-lg",
+                  darkMode ? "bg-gray-700 text-white" : "bg-gray-50 text-gray-800")}>
+                  {selectedUser.rollnumber}
+                </div>
+              </div>
+
+              <div className="flex flex-col">
+                <label className="text-sm font-medium mb-1">Phone Number</label>
+                <div className={cn("px-4 py-3 rounded-lg",
+                  darkMode ? "bg-gray-700 text-white" : "bg-gray-50 text-gray-800")}>
+                  {selectedUser.Phone}
+                </div>
+              </div>
+
+              <div className="flex flex-col">
+                <label className="text-sm font-medium mb-1">UPI ID</label>
+                <div className={cn("px-4 py-3 rounded-lg",
+                  darkMode ? "bg-gray-700 text-white" : "bg-gray-50 text-gray-800")}>
+                  {selectedUser.upiId}
+                </div>
+              </div>
+
+              <div className="pt-4">
+                <button
+                  onClick={handleModalClose}
+                  className={cn("w-full px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2",
+                    darkMode ? "bg-indigo-600 hover:bg-indigo-700 text-white" : "bg-indigo-500 hover:bg-indigo-600 text-white")}
+                >
+                  <XCircle className="h-5 w-5" />
+                  <span>Close Profile</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div>
         <h1 className="text-2xl font-semibold">Custom Print Dashboard</h1>
         <p className={cn("mt-1 text-sm", darkMode ? "text-gray-300" : "text-gray-600")}>
@@ -277,6 +301,17 @@ export function CustomPrint() {
                         disabled={isLoading}
                       >
                         <Trash2 className="h-5 w-5" />
+                      </button>
+                      <button
+                        onClick={() => handleUserModalOpen({
+                          username: print.username,
+                          rollnumber: print.rollnumber,
+                          Phone: print.Phone,
+                          upiId: print.upiId
+                        })}
+                        className="bg-blue-500 text-white px-2 py-1 rounded-md flex items-center"
+                      >
+                        <MessageCircle className="h-5 w-5" />
                       </button>
                       {print.status === 'Completed' ? (
                         <button
