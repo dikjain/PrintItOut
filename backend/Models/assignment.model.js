@@ -22,10 +22,15 @@ const assignmentSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    message: {
+        type: String,
+        default: "",
+    },
     createdAt: {
         type: Date,
         default: Date.now,
     },
+
     pages: {
         type: Number,
         required: true,

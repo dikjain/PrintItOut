@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { FileText, Printer, XCircle, CheckCircle, Trash2, RotateCcw, Users, MessageCircle } from 'lucide-react';
+import { FileText, Printer, XCircle, CheckCircle, Trash2, RotateCcw, Users, MessageCircle ,MessageSquareMore, Contact } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../../context';
 import { useNavigate, useOutletContext } from 'react-router-dom';
@@ -16,20 +16,19 @@ interface Assignment {
   status: string;
   user: User;
   upiId: string;
+  message?: string;
 }
 
 interface ContextType { 
   mode: boolean;
 }
 
-
-
-
 export function AdminDashboard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
+  const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [assignmentName, setAssignmentName] = useState('');
   const [pages, setPages] = useState(0);
@@ -46,6 +45,7 @@ export function AdminDashboard() {
   const [upiId, setUpiId] = useState('');
   const [question, setQuestion] = useState('');
   const [selectedAssignmentId, setSelectedAssignmentId] = useState('');
+  const [selectedMessage, setSelectedMessage] = useState<string | null>(null);
   const { mode: darkMode } = useOutletContext<ContextType>();
 
   const getAllUsers = useCallback(async () => {
@@ -122,11 +122,17 @@ export function AdminDashboard() {
     setIsQuestionModalOpen(true);
   }, [fetchAdminAssignments]);
 
+  const handleMessageModalOpen = useCallback((message: string | undefined) => {
+    setSelectedMessage(message || 'No message');
+    setIsMessageModalOpen(true);
+  }, []);
+
   const handleModalClose = useCallback(() => {
     setIsModalOpen(false);
     setIsAdminModalOpen(false);
     setIsUserModalOpen(false);
     setIsQuestionModalOpen(false);
+    setIsMessageModalOpen(false);
     setAssignmentName('');
     setPages(0);
     setUpiId('');
@@ -134,6 +140,7 @@ export function AdminDashboard() {
     setSelectedUser(null);
     setSelectedAssignmentId('');
     setQuestion('');
+    setSelectedMessage(null);
   }, []);
 
   const handlePagesChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -154,6 +161,7 @@ export function AdminDashboard() {
         userId: user?._id,
         isAdmin: true,
         pages: pages,
+        message: selectedMessage
       });
       if (response.status === 201) {
         handleModalClose();
@@ -166,7 +174,7 @@ export function AdminDashboard() {
     } finally {
       setIsLoading(false);
     }
-  }, [user, assignmentName, pages, navigate, handleModalClose, fetchAssignments]);
+  }, [user, assignmentName, pages, navigate, handleModalClose, fetchAssignments, selectedMessage]);
 
   const handleDeleteAssignment = useCallback(async (assignmentId: string) => {
     try {
@@ -429,6 +437,32 @@ export function AdminDashboard() {
                       >
                         <Trash2 className="h-5 w-5" />
                       </button>
+                      <button
+                        onClick={() => handleMessageModalOpen(assignment.message)}
+                        className={cn("px-2 py-1 rounded-md flex items-center",
+                          darkMode ? "bg-blue-600 hover:bg-blue-700 text-white" : "bg-blue-500 hover:bg-blue-600 text-white")}
+                      >
+                        <MessageCircle className="h-5 w-5" />
+                      </button>
+                      {assignment.status === 'Completed' ? (
+                        <button
+                          onClick={() => handleChangeAssignmentStatus(assignment._id, 'Pending')}
+                          className={cn("px-2 py-1 rounded-md flex items-center",
+                            darkMode ? "bg-yellow-600 hover:bg-yellow-700 text-white" : "bg-yellow-500 hover:bg-yellow-600 text-white")}
+                          disabled={isLoading}
+                        >
+                          <RotateCcw className="h-5 w-5" />
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleChangeAssignmentStatus(assignment._id, 'Completed')}
+                          className={cn("px-2 py-1 rounded-md flex items-center",
+                            darkMode ? "bg-green-600 hover:bg-green-700 text-white" : "bg-green-500 hover:bg-green-600 text-white")}
+                          disabled={isLoading}
+                        >
+                          <CheckCircle className="h-5 w-5" />
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))
@@ -573,6 +607,45 @@ export function AdminDashboard() {
         </div>
       )}
 
+      {isMessageModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 z-50">
+          <div className={cn("p-8 rounded-lg shadow-lg w-full max-w-md mx-4",
+            darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900")}>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-semibold">Assignment Message</h2>
+              <button 
+                onClick={handleModalClose}
+                className={cn("transition-colors",
+                  darkMode ? "text-gray-400 hover:text-gray-300" : "text-gray-400 hover:text-gray-500")}
+              >
+                <XCircle className="h-6 w-6" />
+              </button>
+            </div>
+
+            <div className="space-y-6">
+              <div className="flex flex-col">
+                <label className="text-sm font-medium mb-1">Message</label>
+                <div className={cn("px-4 py-3 rounded-lg",
+                  darkMode ? "bg-gray-700 text-white" : "bg-gray-50 text-gray-800")}>
+                  {selectedMessage}
+                </div>
+              </div>
+
+              <div className="pt-4">
+                <button
+                  onClick={handleModalClose}
+                  className={cn("w-full px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2",
+                    darkMode ? "bg-indigo-600 hover:bg-indigo-700 text-white" : "bg-indigo-500 hover:bg-indigo-600 text-white")}
+                >
+                  <XCircle className="h-5 w-5" />
+                  <span>Close</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex justify-end mb-4">
         <Switch
           onChange={() => setShowAll(!showAll)}
@@ -691,7 +764,13 @@ export function AdminDashboard() {
                         onClick={() => { handleUserModalOpen(assignment.user); setUpiId(assignment.upiId) }}
                         className="bg-blue-500 text-white px-2 py-1 rounded-md flex items-center"
                       >
-                        <MessageCircle className="h-5 w-5" />
+                        <Contact className="h-5 w-5" />
+                      </button>
+                      <button
+                        onClick={() => handleMessageModalOpen(assignment.message)}
+                        className="bg-blue-500 text-white px-2 py-1 rounded-md flex items-center"
+                      >
+                        <MessageSquareMore className="h-5 w-5" />
                       </button>
                       {assignment.status === 'Completed' ? (
                         <button

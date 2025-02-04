@@ -8,18 +8,22 @@ import Switch from 'react-switch';
 import { cn } from '@/lib/utils';
 
 export function CustomPrint() {
+  // State hooks
   const [customPrints, setCustomPrints] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showAll, setShowAll] = useState(false);
-  const { user, setUser } = useAuth();
-  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [isPinModalOpen, setIsPinModalOpen] = useState(true);
   const [pin, setPin] = useState('');
-  const { mode: darkMode } = useOutletContext();
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
+  // Context hooks
+  const { user, setUser } = useAuth();
+  const { mode: darkMode } = useOutletContext();
+  const navigate = useNavigate();
+
+  // Callbacks
   const getAllUsers = useCallback(async () => {
     const response = await axios.get('/api/users/allusers');
     setUsers(response.data);
@@ -29,44 +33,20 @@ export function CustomPrint() {
     try {
       setIsLoading(true);
       const response = await axios.get('/api/customprint');
-      // Ensure response.data is an array
       setCustomPrints(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Error fetching custom prints:', error);
-      setCustomPrints([]); // Set to empty array on error
+      setCustomPrints([]);
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  useEffect(() => {
-      if (!user) {
-          try {
-              const localUser = localStorage.getItem('user');
-              if (localUser) {
-                  setUser(JSON.parse(localUser));
-                } else {
-                    navigate('/login');
-                }
-            } catch (error) {
-                console.error('Error fetching user:', error);
-            }
-        }
-    }, [user, navigate, setUser]);
-    
-    useEffect(() => {
-        fetchCustomPrints();
-  }, [fetchCustomPrints]);
-
-  useEffect(() => {
-    getAllUsers();
-  }, [getAllUsers]);
-
   const handleDeletePrint = useCallback(async (printId) => {
     try {
       setIsLoading(true);
       await axios.delete(`/api/customprint/${printId}`);
-      await fetchCustomPrints(); // Refresh the prints list after deletion
+      await fetchCustomPrints();
     } catch (error) {
       console.error('Error deleting print:', error);
     } finally {
@@ -86,8 +66,51 @@ export function CustomPrint() {
     }
   }, [fetchCustomPrints]);
 
+  const handleUserModalOpen = useCallback((user) => {
+    setSelectedUser(user);
+    setIsUserModalOpen(true);
+  }, []);
+
+  const handleModalClose = useCallback(() => {
+    setIsUserModalOpen(false);
+    setSelectedUser(null);
+  }, []);
+
+  const handlePinSubmit = useCallback(() => {
+    if (pin === '1289') {
+      setIsPinModalOpen(false);
+    } else {
+      navigate('/login');
+    }
+  }, [pin, navigate]);
+
+  // Effects
+  useEffect(() => {
+    if (!user) {
+      try {
+        const localUser = localStorage.getItem('user');
+        if (localUser) {
+          setUser(JSON.parse(localUser));
+        } else {
+          navigate('/login');
+        }
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      }
+    }
+  }, [user, navigate, setUser]);
+
+  useEffect(() => {
+    fetchCustomPrints();
+  }, [fetchCustomPrints]);
+
+  useEffect(() => {
+    getAllUsers();
+  }, [getAllUsers]);
+
+  // Memos
   const pendingPrintsCount = useMemo(() => 
-    Array.isArray(customPrints) ? customPrints.filter(p => p.status === 'Pending').length : 0, 
+    Array.isArray(customPrints) ? customPrints.filter(p => p.status === 'Pending').length : 0,
     [customPrints]
   );
 
@@ -99,20 +122,39 @@ export function CustomPrint() {
       : customPrints.filter(p => p.status === 'Pending').reduce((total, print) => total + print.pages, 0);
   }, [customPrints, showAll]);
 
-  const handleUserModalOpen = useCallback((user) => {
-    setSelectedUser(user);
-    setIsUserModalOpen(true);
-  }, []);
-
-  const handleModalClose = useCallback(() => {
-    setIsUserModalOpen(false);
-    setSelectedUser(null);
-  }, []);
-
   const filteredPrints = useMemo(() => {
     if (!Array.isArray(customPrints)) return [];
     return showAll ? customPrints : customPrints.filter(print => print.status === 'Pending');
   }, [customPrints, showAll]);
+
+  if (isPinModalOpen) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 z-50">
+        <div className={cn("p-8 rounded-lg shadow-lg w-96", darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900")}>
+          <h2 className={cn("text-xl font-semibold", darkMode ? "text-white" : "text-gray-900")}>Enter PIN</h2>
+          <div className="flex flex-col">
+            <label className="text-sm font-medium mb-1">PIN</label>
+            <input
+              value={pin}
+              onChange={(e) => setPin(e.target.value)}
+              className={cn("mt-1 block w-full border px-3 py-2 rounded-md shadow-sm", 
+                darkMode ? "bg-gray-700 border-gray-600 text-white" : "border-gray-300 bg-white")}
+            />
+          </div>
+          <div className="pt-4">
+            <button
+              onClick={handlePinSubmit}
+              className={cn("w-full px-4 py-3 rounded-lg font-medium transition-colors flex items-center justify-center space-x-2",
+                darkMode ? "bg-indigo-600 hover:bg-indigo-700 text-white" : "bg-indigo-500 hover:bg-indigo-600 text-white")}
+            >
+              <CheckCircle className="h-5 w-5" />
+              <span>Submit</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`space-y-6 relative transition-colors duration-[500ms] min-h-screen p-6 ${darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"}`}>

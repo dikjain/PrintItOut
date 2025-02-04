@@ -23,6 +23,7 @@ interface Print {
   assignmentId: string;
   createdAt: string;
   status?: string;
+  message?: string;
 }
 
 interface User {
@@ -55,6 +56,7 @@ export function StudentDashboard() {
   const [selectedAssignment, setSelectedAssignment] = useState<{id: string, title: string, pages: number} | null>(null);
   const [paymentAgreement, setPaymentAgreement] = useState(false);
   const [userUpiId, setUserUpiId] = useState("");
+  const [message, setMessage] = useState("");
   const { mode: darkMode } = useOutletContext<OutletContextType>();
   const [showQueryModal, setShowQueryModal] = useState(false);
   const [selectedQuery, setSelectedQuery] = useState<string | null>(null);
@@ -137,6 +139,7 @@ export function StudentDashboard() {
       setSelectedAssignment(null);
       setPaymentAgreement(false);
       setUserUpiId("");
+      setMessage("");
       alert("Assignment already printed");
       return;
     }
@@ -146,7 +149,8 @@ export function StudentDashboard() {
         userId: user._id, 
         title: selectedAssignment.title, 
         pages: selectedAssignment.pages,
-        upiId: userUpiId
+        upiId: userUpiId,
+        message: message
       });
       
       if (response.status === 201) {
@@ -155,7 +159,8 @@ export function StudentDashboard() {
           title: selectedAssignment.title, 
           pages: selectedAssignment.pages, 
           assignmentId: selectedAssignment.id,
-          upiId: userUpiId
+          upiId: userUpiId,
+          message: message
         });
         
         if (response2.status === 201) {
@@ -166,7 +171,8 @@ export function StudentDashboard() {
             pages: selectedAssignment.pages, 
             assignmentId: selectedAssignment.id, 
             createdAt, 
-            status: 'Pending' 
+            status: 'Pending',
+            message: message
           };
           
           setPrints(prev => [...prev, newPrint]);
@@ -187,6 +193,7 @@ export function StudentDashboard() {
       setSelectedAssignment(null);
       setPaymentAgreement(false);
       setUserUpiId("");
+      setMessage("");
     }
   };
 
@@ -276,12 +283,23 @@ export function StudentDashboard() {
                     placeholder="Enter your UPI ID"
                   />
                 </label>
+                <label className="flex flex-col space-y-2 w-full">
+                  <span className="text-sm">Message (optional)</span>
+                  <textarea
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    className="form-textarea mt-1 block w-full px-2 py-1 rounded-md text-black"
+                    placeholder="Any special instructions for printing?"
+                    rows={3}
+                  />
+                </label>
                 <div className="flex space-x-4">
                   <button
                     onClick={() => {
                       setShowQR(false);
                       setPaymentAgreement(false);
                       setUserUpiId("");
+                      setMessage("");
                     }}
                     className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
                   >
@@ -335,6 +353,9 @@ export function StudentDashboard() {
                               <p className={`text-sm ${user && historyPrint && historyPrint.status === 'Completed' ? 'text-green-500' : 'text-yellow-500'}`}>
                                 Status: {user && historyPrint && historyPrint.status}
                               </p>
+                              {historyPrint.message && (
+                                <p className="text-sm text-gray-500">Message: {historyPrint.message}</p>
+                              )}
                             </div>
                           </div>
                           <div className="text-sm">{user && historyPrint && new Date(historyPrint.createdAt).toLocaleString()}</div>

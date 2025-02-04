@@ -3,7 +3,7 @@ import Users from "../Models/user.model.js";
 
 const addAssignment = async (req, res) => {
     try {
-        const { title, userId, isAdmin, pages, upiId } = req.body;
+        const { title, userId, isAdmin, pages, upiId, message } = req.body;
 
         if (!title || !userId || !pages) {
             return res.status(400).json({ message: "Please provide all fields" });
@@ -15,7 +15,7 @@ const addAssignment = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-        const assignment = await Assignments.create({ title, user: userId, pages, isAdmin, upiId });
+        const assignment = await Assignments.create({ title, user: userId, pages, isAdmin, upiId, message });
 
         if (assignment) {
             res.status(201).json(assignment);
