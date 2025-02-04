@@ -2,7 +2,7 @@ import CustomPrint from "../Models/customPrint.model.js";
 
 export const createCustomPrint = async (req, res) => {
     try {
-        const { fileUrl, title, pages, userId, upiId, message, rollnumber, Phone, username } = req.body;
+        const { fileUrl, title, pages, userId, upiId, message, rollnumber, Phone, username, copies } = req.body;
 
 
 
@@ -18,9 +18,11 @@ export const createCustomPrint = async (req, res) => {
             upiId,
             message,
             rollnumber,
+            copies,
             Phone,
             username,
             status: "Pending"
+
         });
 
         const savedCustomPrint = await newCustomPrint.save();
@@ -88,3 +90,24 @@ export const getAllCustomPrints = async (req, res) => {
     }
 };
 
+export const deleteCustomPrint = async (req, res) => {
+    try {
+        const { printId } = req.params;
+
+        if (!printId) {
+            return res.status(400).json({ message: "Print ID is required" });
+        }
+
+        const deletedPrint = await CustomPrint.findByIdAndDelete(printId);
+
+        if (!deletedPrint) {
+            return res.status(404).json({ message: "Custom print not found" });
+        }
+
+        res.status(200).json({ message: "Custom print deleted successfully" });
+
+    } catch (error) {
+        console.error("Error deleting custom print:", error);
+        res.status(500).json({ message: "Error deleting custom print" });
+    }
+};

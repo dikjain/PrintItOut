@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { FileText, Printer, XCircle, CheckCircle, Trash2, RotateCcw, Users, MessageCircle } from 'lucide-react';
+import { FileText, Printer, XCircle, CheckCircle, Trash2, RotateCcw, Users, MessageCircle, ExternalLink } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../../context';
 import { useNavigate, useOutletContext } from 'react-router-dom';
@@ -56,7 +56,6 @@ export function CustomPrint() {
     
     useEffect(() => {
         fetchCustomPrints();
-        console.log(customPrints);
   }, [fetchCustomPrints]);
 
   useEffect(() => {
@@ -67,7 +66,7 @@ export function CustomPrint() {
     try {
       setIsLoading(true);
       await axios.delete(`/api/customprint/${printId}`);
-      fetchCustomPrints();
+      await fetchCustomPrints(); // Refresh the prints list after deletion
     } catch (error) {
       console.error('Error deleting print:', error);
     } finally {
@@ -109,6 +108,11 @@ export function CustomPrint() {
     setIsUserModalOpen(false);
     setSelectedUser(null);
   }, []);
+
+  const filteredPrints = useMemo(() => {
+    if (!Array.isArray(customPrints)) return [];
+    return showAll ? customPrints : customPrints.filter(print => print.status === 'Pending');
+  }, [customPrints, showAll]);
 
   return (
     <div className={`space-y-6 relative transition-colors duration-[500ms] min-h-screen p-6 ${darkMode ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"}`}>
@@ -267,10 +271,10 @@ export function CustomPrint() {
                 <div className="flex justify-center">
                   <FaSpinner className="h-8 w-8 animate-spin text-gray-500" />
                 </div>
-              ) : !Array.isArray(customPrints) || customPrints.length === 0 ? (
+              ) : !Array.isArray(filteredPrints) || filteredPrints.length === 0 ? (
                 <p className="text-sm text-center">No custom prints at this moment</p>
               ) : (
-                customPrints.map((print, i) => (
+                filteredPrints.map((print, i) => (
                   <div
                     key={i}
                     className={`flex flex-col sm:flex-row items-start sm:items-center justify-between ${
@@ -283,7 +287,7 @@ export function CustomPrint() {
                       </div>
                       <div className="ml-4">
                         <p className="text-sm font-medium text-gray-800">{print.title}</p>
-                        <p className="text-sm text-gray-500">{print.pages} pages</p>
+                        <p className="text-sm text-gray-500">{print.pages} pages × {print.copies || 1} copies</p>
                         <p className="text-sm text-gray-500">Roll No: {print.rollnumber}</p>
                         <p className="text-sm text-gray-500">Phone: {print.Phone}</p>
                         {print.message && (
@@ -295,6 +299,14 @@ export function CustomPrint() {
                       <div className="text-sm text-gray-500">
                         {new Date(print.createdAt).toLocaleString()}
                       </div>
+                      <a
+                        href={print.fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-blue-500 text-white px-2 py-1 rounded-md flex items-center"
+                      >
+                        <ExternalLink className="h-5 w-5" />
+                      </a>
                       <button
                         onClick={() => handleDeletePrint(print._id)}
                         className="bg-red-500 text-white px-2 py-1 rounded-md flex items-center"

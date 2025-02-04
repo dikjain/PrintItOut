@@ -22,10 +22,17 @@ const customPrintSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    copies: {
+        type: Number,
+        required: true,
+        default: 1
+    },
     message: {
         type: String,
         default: ""
     },
+
+
     rollnumber: {
         type: String,
         required: true

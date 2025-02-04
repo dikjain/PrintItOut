@@ -11,8 +11,9 @@ import { cn } from '@/lib/utils';
 export function FilePrint() {
   const [file, setFile] = useState(null);
   const [pages, setPages] = useState(0);
+  const [copies, setCopies] = useState(1); // Added copies state
   const [title, setTitle] = useState('');
-  const [message, setMessage] = useState(''); // Added message state
+  const [message, setMessage] = useState('');
   const [showQR, setShowQR] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [upiUrl, setUpiUrl] = useState('');
@@ -153,7 +154,7 @@ export function FilePrint() {
   };
 
   const generateQRCode = async () => {
-    const printingCost = pages * 2;
+    const printingCost = pages * 2 * copies; // Updated to include copies
     const totalAmount = printingCost + HANDLING_CHARGES;
     const upiUrl = `upi://pay?pa=${upiId}&pn=${userName}&am=${totalAmount}&cu=INR`;
     setUpiUrl(upiUrl);
@@ -199,6 +200,7 @@ export function FilePrint() {
         fileUrl,
         title,
         pages,
+        copies,
         rollnumber : user.rollnumber,
         Phone : user.phone,
         userId: user._id,
@@ -212,6 +214,7 @@ export function FilePrint() {
       setShowQR(false);
       setFile(null);
       setPages(0);
+      setCopies(1); // Reset copies
       setTitle('');
       setMessage('');
       setPaymentAgreement(false);
@@ -254,6 +257,18 @@ export function FilePrint() {
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
+                  className={`w-full p-3 rounded-xl border ${currentTheme.border} bg-white/90 text-black backdrop-blur-xl`}
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block mb-2 font-medium">Number of Copies</label>
+                <input
+                  type="number"
+                  min="1"
+                  value={copies}
+                  onChange={(e) => setCopies(Math.max(1, parseInt(e.target.value)))}
                   className={`w-full p-3 rounded-xl border ${currentTheme.border} bg-white/90 text-black backdrop-blur-xl`}
                   required
                 />
@@ -311,8 +326,12 @@ export function FilePrint() {
                     <span className="font-semibold">{pages}</span>
                   </div>
                   <div className="flex justify-between items-center">
+                    <span>Number of Copies:</span>
+                    <span className="font-semibold">{copies}</span>
+                  </div>
+                  <div className="flex justify-between items-center">
                     <span>Printing Cost (₹2/page):</span>
-                    <span className="font-semibold">₹{pages * 2}</span>
+                    <span className="font-semibold">₹{pages * 2 * copies}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span>Handling Charges:</span>
@@ -321,7 +340,7 @@ export function FilePrint() {
                   <div className="flex justify-between items-center text-lg font-bold">
                     <span>Total Amount:</span>
                     <span className={`text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>
-                      ₹{(pages * 2) + HANDLING_CHARGES}
+                      ₹{(pages * 2 * copies) + HANDLING_CHARGES}
                     </span>
                   </div>
                 </div>
@@ -366,7 +385,7 @@ export function FilePrint() {
                         <FileText className={`h-5 w-5 ${darkMode ? 'text-green-400' : 'text-blue-500'}`} />
                         <div>
                           <h3 className="font-semibold">{print.title}</h3>
-                          <p className="text-sm text-gray-400">{print.pages} pages</p>
+                          <p className="text-sm text-gray-400">{print.pages} pages × {print.copies || 1} copies</p>
                           {print.message && (
                             <p className="text-sm text-gray-400 mt-1">{print.message}</p>
                           )}
@@ -412,8 +431,16 @@ export function FilePrint() {
 
               <div className={`p-4 rounded-xl ${currentTheme.cardBg} space-y-3 mb-6`}>
                 <div className="flex justify-between items-center">
+                  <span>Pages per Copy:</span>
+                  <span className="font-semibold">{pages}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span>Number of Copies:</span>
+                  <span className="font-semibold">{copies}</span>
+                </div>
+                <div className="flex justify-between items-center">
                   <span>Printing Cost (₹2/page):</span>
-                  <span className="font-semibold">₹{pages * 2}</span>
+                  <span className="font-semibold">₹{pages * 2 * copies}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span>Handling Charges:</span>
@@ -422,7 +449,7 @@ export function FilePrint() {
                 <div className="flex justify-between items-center text-lg font-bold">
                   <span>Total Amount:</span>
                   <span className={`text-transparent bg-clip-text bg-gradient-to-r ${currentTheme.accentGradient}`}>
-                    ₹{(pages * 2) + HANDLING_CHARGES}
+                    ₹{(pages * 2 * copies) + HANDLING_CHARGES}
                   </span>
                 </div>
               </div>
