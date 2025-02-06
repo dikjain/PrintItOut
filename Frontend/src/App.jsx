@@ -11,6 +11,10 @@ import { ForgotPasswordPage } from './pages/auth/ForgotPasswordForm';
 import { Toaster } from "./components/ui/sonner";
 import { FilePrint } from './pages/student/FilePrint';
 import { CustomPrint } from './pages/admin/CustomPrint';
+import HowItWorks from './pages/HowItWorks';
+
+
+
 function App() {
   return (
     <Router>
@@ -27,6 +31,7 @@ function App() {
             <Route path="assignments" element={<StudentDashboard />} />
             <Route path="history" element={<StudentDashboard />} />
             <Route path="print" element={<FilePrint />} />
+            <Route path="howitworks" element={<HowItWorks />} />
           </Route>
           <Route path="/admin" element={<DashboardLayout />}>
             <Route index element={<AdminDashboard />} />

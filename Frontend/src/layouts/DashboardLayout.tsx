@@ -1,6 +1,6 @@
 import  { useEffect, useState, useMemo } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Printer, Home, FileText, History, LogOut, Moon, Sun, Menu, X, PrinterIcon } from 'lucide-react';
+import { Printer, Home, FileText, History, LogOut, Moon, Sun, Menu, X, PrinterIcon, HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { PageTransition } from '@/components/animations/PageTransition';
@@ -13,8 +13,9 @@ const navigation = [
     { name: 'Custom Print', href: '/admin/customprint', icon: PrinterIcon },
   ] : [
     { name: 'Assignments', href: '/dashboard/assignments', icon: FileText },
-    { name: 'Print History', href: '/dashboard/history', icon: History },
-    { name: 'Print', href: '/dashboard/print', icon: PrinterIcon },
+    { name: 'Custom Print', href: '/dashboard/print', icon: PrinterIcon },
+    { name: 'How It Works', href: '/dashboard/howitworks', icon: HelpCircle },
+    { name: 'Print History', href: '/dashboard/history', icon: History }
     
   ]),
 ];
@@ -145,7 +146,7 @@ export function DashboardLayout() {
                   className="flex items-center"
                 >
                   <Printer className={cn("h-8 w-8", currentTheme.text)} />
-                  <span className="ml-2 text-2xl font-bold tracking-wider">Print Portal</span>
+                  <span className="ml-2 text-2xl font-bold tracking-wider">Print-It-Out</span>
                 </motion.div>
                 {window.innerWidth < 1024 && <button onClick={toggleSidebar} className="text-gray-600 hover:text-gray-900">
                   <X className="h-6 w-6" />
