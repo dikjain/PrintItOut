@@ -253,6 +253,7 @@ export function StudentDashboard() {
           <h2 className="text-xl font-semibold mb-4">Payment Required</h2>
           <p className="text-red-500 mb-2 text-[12px]">Note: if you don't pay the amount, we won't print your assignment ( every payment is checked )</p>
           <p className="mb-4">Amount to pay: ₹{selectedAssignment ? selectedAssignment.pages * 2 : 0}</p>
+          <p className="text-sm text-gray-400 mb-2">UPI ID: {upiId}</p>
           {qrCodeUrl && (
             <div className="flex flex-col items-center">
               <div className="flex items-center gap-4 mb-2">
